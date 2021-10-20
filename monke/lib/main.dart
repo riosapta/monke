@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'record.dart';
 import 'HamburgerDrawer.dart';
 import 'RecordCard.dart';
+import 'recordsData.dart';
 
 
 void main() {
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'MonkeGIGA',
       theme: ThemeData(
-        primarySwatch: Colors.grey,
+        primarySwatch: Colors.teal,
       ),
       home: const MyHomePage(title: 'MonkeGIGA'),
     );
@@ -30,12 +31,14 @@ class MyHomePage extends StatefulWidget {
 
   final String title;
 
+
+
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
+  List<Widget> itemsData = [];
   DateTime selectedDate = DateTime.now();
 
   Future<void> _selectDate(BuildContext context) async {
@@ -54,9 +57,82 @@ class _MyHomePageState extends State<MyHomePage> {
     return RecordCard();
   }
 
+  void getPostsData() {
+    List<dynamic> responseList = RECORDS_DATA;
+    List<Widget> listItems = [];
+    responseList.forEach((post) {
+      listItems.add(Card(
+          margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Text(
+                    "${post["date"]}".split(' ')[0],
+                    style: TextStyle(
+                      fontSize: 12,
+                    ),),
+                  SizedBox(height: 6.0),
+                  Divider(
+                    color: Colors.black,
+                  ),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children:<Widget>[
+                        CircleAvatar(
+                          radius: 15,
+                          child: Text(
+                              'AR',
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: Colors.white,
+                              )
+                          ),
+                          backgroundColor: Colors.grey,
+                        ),
+                        Expanded(
+                            child: Container(
+                                padding: EdgeInsets.all(10),
+                                child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children:<Widget>[
+                                      Text(post["category"],
+                                          style: TextStyle(
+                                            fontSize: 13,)),
+                                      Text(post["account"],
+                                          style: TextStyle(
+                                            fontSize: 10,)),
+                                    ]
+                                )
+                            )
+                        ),
+                        Text('Rp${post["amount"]}',
+                            style:TextStyle(
+                              fontSize: 20,
+                            )),
+                      ]
+                  )
+                ]
+            ),
+          )
+      ));
+    });
+    setState(() {
+      itemsData = listItems;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getPostsData();
+  }
+
   void showFilterBy(BuildContext context) => showDialog(
     context: context, barrierDismissible: false,  builder: (BuildContext context) {
     return Dialog(
+
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
@@ -75,19 +151,22 @@ class _MyHomePageState extends State<MyHomePage> {
                 children: [
                   TextButton(
                     onPressed: () {},
-                    child: Text('Daily'),
+                    child:
+                      Text('Daily'),
                     style: ButtonStyle(
                     ),
                   ),
                   TextButton(
                     onPressed: () {},
-                    child: Text('Weekly'),
+                    child:
+                      Text('Weekly'),
                     style: ButtonStyle(
                     ),
                   ),
                   TextButton(
                     onPressed: () {},
-                    child: Text('Monthly'),
+                    child:
+                      Text('Monthly'),
                     style: ButtonStyle(
                     ),
                   ),
@@ -100,30 +179,55 @@ class _MyHomePageState extends State<MyHomePage> {
                   Divider(
                     color: Colors.black,
                   ),
-                  Text('By Time'),
+                  Text(
+                    'By Time',
+                    style: TextStyle(
+                      color: Colors.grey,
+                    ),
+                  ),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Text('From:'),
+                      Text(
+                        'From:',
+                        style: TextStyle(
+                          color: Colors.grey,
+                        ),
+                      ),
                       TextButton(
                         onPressed: () => _selectDate(context),
                         child: Text("${selectedDate.toLocal()}".split(' ')[0]),
                       ),
-                      Text('From:'),
+                      Text(
+                        'to:',
+                        style: TextStyle(
+                          color: Colors.grey,
+                        ),
+                      ),
                       TextButton(
                         onPressed: () => _selectDate(context),
                         child: Text("${selectedDate.toLocal()}".split(' ')[0]),
                       ),
                     ]
                   ),
-                  Text('By Category'),
+                  Text(
+                    'By Category',
+                    style: TextStyle(
+                      color: Colors.grey,
+                    ),
+                  ),
                   TextButton(
                     onPressed: () {},
                     child: Text('Select Category'),
                     style: ButtonStyle(
                     ),
                   ),
-                  Text('By Type'),
+                  Text(
+                    'By Type',
+                    style: TextStyle(
+                      color: Colors.grey,
+                    ),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -147,7 +251,12 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ],
                   ),
-                  Text('By Account'),
+                  Text(
+                    'By Account',
+                    style: TextStyle(
+                      color: Colors.grey,
+                    ),
+                  ),
                   TextButton(
                     onPressed: () {},
                     child: Text('Select Category'),
@@ -158,12 +267,26 @@ class _MyHomePageState extends State<MyHomePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         TextButton(
-                          onPressed: () {},
-                          child: Text('Cancel'),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child:
+                            Text(
+                              'Cancel',
+                              style: TextStyle(
+                                color: Colors.black,
+                              ),
+                            ),
                         ),
                         TextButton(
                           onPressed: () {},
-                          child: Text('Confirm'),
+                          child:
+                            Text(
+                              'Confirm',
+                              style: TextStyle(
+                                color: Colors.black,
+                              ),
+                            ),
                         ),
                       ]
                   )
@@ -185,9 +308,9 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     List<Record> records = [
       Record(recordDate: selectedDate,category: 'Income',account: 'Bank',amount: 100000),
-      Record(recordDate: selectedDate,category: 'Expense',account: 'Bank',amount: 200000),
-      Record(recordDate: selectedDate,category: 'Income',account: 'Cash',amount: 300000),
-      Record(recordDate: selectedDate,category: 'Income',account: 'Cash',amount: 400000),
+      Record(recordDate: DateTime.utc(2021, 10, 20),category: 'Expense',account: 'Bank',amount: 200000),
+      Record(recordDate: DateTime.utc(2021, 10, 20),category: 'Income',account: 'Cash',amount: 300000),
+      Record(recordDate: DateTime.utc(2021, 10, 22),category: 'Income',account: 'Cash',amount: 400000),
     ];
 
 
@@ -213,13 +336,15 @@ class _MyHomePageState extends State<MyHomePage> {
         ]
       ),
 //////////////////////////////// Body /////////////////////////////////////////
-      body: SingleChildScrollView(
-        child: Column(
+      body:
+      // SingleChildScrollView(
+      //   child:
+        Column(
           children: <Widget>[
           //////////////////////////////// INCOME EXPENSE TOTAL /////////////////////////////////////////
           Container(
             padding: EdgeInsets.all(15.0),
-            color: Colors.grey[350],
+            color: Colors.teal[400],
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
@@ -237,7 +362,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         style: TextStyle(
                           fontSize: 15.0,
                           fontWeight: FontWeight.w500,
-                          color: Colors.green,
+                          color: Colors.white,
                         )
                     ),
                   ]
@@ -256,7 +381,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           style: TextStyle(
                             fontSize: 15.0,
                             fontWeight: FontWeight.w500,
-                            color: Colors.red,
+                            color: Colors.white,
                           )
                       ),
                     ]
@@ -275,6 +400,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           style: TextStyle(
                             fontSize: 15.0,
                             fontWeight: FontWeight.w500,
+                            color: Colors.white,
                           )
                       ),
                     ]
@@ -296,7 +422,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
                         IconButton(
-                          icon: const Icon(Icons.skip_previous),
+                          icon: const Icon(Icons.keyboard_arrow_left_rounded),
                           onPressed: () {
                             setState(() {
                               selectedDate = selectedDate.subtract(const Duration(days: 1));
@@ -308,7 +434,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: Text("${selectedDate.toLocal()}".split(' ')[0]),
                         ),
                         IconButton(
-                          icon: const Icon(Icons.skip_next),
+                          icon: const Icon(Icons.keyboard_arrow_right_rounded),
                             onPressed: () {
                               setState(() {
                                 selectedDate = selectedDate.subtract(const Duration(days: 1));
@@ -334,29 +460,37 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
           //////////////////////////////// CONTENT /////////////////////////////////////////
-          SingleChildScrollView(
-            child: Container(
-              child: Column(
-                children: records.map((record) => RecordCard(record: record)).toList(),),
-            ),
-          ),
+          // SingleChildScrollView(
+          //   child: Container(
+          //     child: Column(
+          //       children: records.map((record) => RecordCard(record: record)).toList(),),
+          //   ),
+          // ),
+          Expanded(
+              child: ListView.builder(
+                  itemCount: itemsData.length,
+                  physics: BouncingScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return itemsData[index];
+                  })),
 
 
         ],
 
       ),
 
-    ),
+    // ),
 
       //////////////////////////////// FLOATING ACTION BUTTON /////////////////////////////////////////
       floatingActionButton:  FloatingActionButton.extended(
         onPressed: () {},
-        icon: Icon(Icons.add_circle_outline),
+        icon: Icon(Icons.add_circle_outline, color: Colors.black),
         label: Text('Add New Records',
             style:TextStyle(
               fontSize: 12,
+              color: Colors.black,
             )),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.amber[200],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
 
@@ -364,9 +498,9 @@ class _MyHomePageState extends State<MyHomePage> {
       //////////////////////////////// BOTTOM NAVIGATION BAR /////////////////////////////////////////
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.teal[400],
         unselectedItemColor: Colors.white,
-        selectedItemColor: Colors.amber,
+        selectedItemColor: Colors.amber[200],
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.event_note_sharp),
