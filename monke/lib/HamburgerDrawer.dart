@@ -8,58 +8,71 @@ class HamburgerDrawer extends StatelessWidget {
         // Important: Remove any padding from the ListView.
         padding: EdgeInsets.zero,
         children: [
-          DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.grey,
-              ),
-              child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget> [
-                      Text(
-                          'MONKE',
-                          style: TextStyle(
-                            fontFamily: 'QuickSand',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 45.0,
-                          )
-                      ),
-                      Text(
-                          'Your Personal Money Manager',
-                          style: TextStyle(
-                            fontFamily: 'QuickSand',
-                            fontSize: 10.5,
-                          )
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(22),
-                        child:  Text(
-                            'Sign In',
+          Container(
+            height: 225.0,
+            child: DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Color(0xff00A29B),
+
+                ),
+                child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget> [
+                        Text(
+                            'MONKE',
                             style: TextStyle(
                               fontFamily: 'QuickSand',
-                              //fontWeight: FontWeight.bold,
-                              fontSize: 13.0,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 45.0,
                             )
                         ),
-                      ),
-                    ],
-                  )
-              )
-          ),
-          ListTile(
-            leading: CircleAvatar(
-              radius: 12,
-              child: Text(
-                  'AR',
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: Colors.white,
-                  )
-              ),
-              backgroundColor: Colors.grey,
+                        Text(
+                            'Your Personal Money Manager',
+                            style: TextStyle(
+                              fontFamily: 'QuickSand',
+                              fontSize: 10.5,
+                            )
+                        ),
+                        Center(
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(0, 11, 0, 0),
+                            child: CircleAvatar(
+                              radius: 25,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.fromLTRB(22, 5, 22, 0),
+                          child:  Text(
+                              'Sign In',
+                              style: TextStyle(
+                                fontFamily: 'QuickSand',
+                                //fontWeight: FontWeight.bold,
+                                fontSize: 13.0,
+                              )
+                          ),
+                        ),
+                      ],
+                    )
+                )
             ),
-            title: const Text('Profile'),
+          ),
 
+          ListTile(
+            leading: Icon(Icons.account_circle_rounded),
+              // CircleAvatar(
+              //   radius: 12,
+              //   child: Text(
+              //       'AR',
+              //       style: TextStyle(
+              //         fontSize: 10,
+              //         color: Colors.white,
+              //       )
+              //   ),
+              //   backgroundColor: Colors.grey,
+              // ),
+            title: const Text('Profile'),
             onTap: () {
               // Update the state of the app
               // ...
