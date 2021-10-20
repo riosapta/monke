@@ -35,13 +35,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
 
   DateTime selectedDate = DateTime.now();
 
@@ -61,6 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return RecordCard();
   }
 
+  int _selectedIndex = 0;
 
   //////////////////////////////// HomePage /////////////////////////////////////////
   @override
@@ -71,7 +65,10 @@ class _MyHomePageState extends State<MyHomePage> {
       Record(recordDate: selectedDate,category: 'Income',account: 'Cash',amount: 300000),
       Record(recordDate: selectedDate,category: 'Income',account: 'Cash',amount: 400000),
     ];
+
+
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       //////////////////////////////// AppBar /////////////////////////////////////////
       drawer: HamburgerDrawer(),
       appBar: AppBar(
@@ -218,12 +215,48 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Column(
                 children: records.map((record) => RecordCard(record: record)).toList(),),
             )
-          )
+          ),
+
+
+
 
         ],
       ),
-    ));
+    ),
+
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.black,
+        unselectedItemColor: Colors.white,
+        selectedItemColor: Colors.amber,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.event_note_sharp),
+            label: 'Records',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_balance_wallet_outlined),
+            label: 'Accounts',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.show_chart),
+            label: 'Analysis',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.event_note_sharp),
+            label: 'Categories',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+      ),
+    );
   }
 }
+
 
 
