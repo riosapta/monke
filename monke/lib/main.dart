@@ -322,7 +322,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   flex: 1,
                   child: IconButton(
                     icon: const Icon(Icons.filter_list_alt),
-                    onPressed: () { },
+                    onPressed: () => showFilterBy(context),
                   ),
                 ),
               ]
@@ -350,7 +350,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
       //////////////////////////////// FLOATING ACTION BUTTON /////////////////////////////////////////
       floatingActionButton:  FloatingActionButton.extended(
-        onPressed: () => showFilterBy(context),
+        onPressed: () {},
         icon: Icon(Icons.add_circle_outline),
         label: Text('Add New Records',
             style:TextStyle(
