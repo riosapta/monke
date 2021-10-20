@@ -214,16 +214,30 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Container(
               child: Column(
                 children: records.map((record) => RecordCard(record: record)).toList(),),
-            )
+            ),
           ),
 
 
-
-
         ],
+
       ),
+
     ),
 
+      //////////////////////////////// FLOATING ACTION BUTTON /////////////////////////////////////////
+      floatingActionButton:  FloatingActionButton.extended(
+        onPressed: () { },
+        icon: Icon(Icons.add_circle_outline),
+        label: Text('Add New Records',
+            style:TextStyle(
+              fontSize: 12,
+            )),
+        backgroundColor: Colors.white,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+
+
+      //////////////////////////////// BOTTOM NAVIGATION BAR /////////////////////////////////////////
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.black,
