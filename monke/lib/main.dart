@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'record.dart';
+import 'HamburgerDrawer.dart';
+import 'RecordCard.dart';
 
 
 void main() {
@@ -56,63 +58,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget recordTemplate(record){
-    return Card(
-      margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Text(
-                "${record.recordDate.toLocal()}".split(' ')[0],
-                style: TextStyle(
-                  fontSize: 12,
-                ),),
-              SizedBox(height: 6.0),
-              Divider(
-                color: Colors.black,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children:<Widget>[
-                  CircleAvatar(
-                    radius: 15,
-                    child: Text(
-                        'AR',
-                        style: TextStyle(
-                          fontSize: 10,
-                          color: Colors.white,
-                        )
-                    ),
-                    backgroundColor: Colors.grey,
-                  ),
-                  Expanded(
-                    child: Container(
-                        padding: EdgeInsets.all(10),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children:<Widget>[
-                              Text(record.category,
-                                  style: TextStyle(
-                                    fontSize: 13,)),
-                              Text(record.account,
-                                  style: TextStyle(
-                                    fontSize: 10,)),
-                            ]
-                        )
-                    )
-                  ),
-                  Text('Rp${record.amount}',
-                  style:TextStyle(
-                    fontSize: 20,
-                  )),
-                ]
-              )
-            ]
-        ),
-      )
-    );
+    return RecordCard();
   }
+
 
   //////////////////////////////// HomePage /////////////////////////////////////////
   @override
@@ -125,116 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
     ];
     return Scaffold(
       //////////////////////////////// AppBar /////////////////////////////////////////
-      drawer: Drawer(
-        child: ListView(
-          // Important: Remove any padding from the ListView.
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.grey,
-              ),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget> [
-                    Text(
-                        'MONKE',
-                        style: TextStyle(
-                          fontFamily: 'QuickSand',
-                          fontWeight: FontWeight.bold,
-                          fontSize: 45.0,
-                        )
-                    ),
-                    Text(
-                        'Your Personal Money Manager',
-                        style: TextStyle(
-                          fontFamily: 'QuickSand',
-                          fontSize: 10.5,
-                        )
-                    ),
-                    Container(
-                        padding: EdgeInsets.all(22),
-                        child:  Text(
-                            'Sign In',
-                            style: TextStyle(
-                              fontFamily: 'QuickSand',
-                              //fontWeight: FontWeight.bold,
-                              fontSize: 13.0,
-                            )
-                        ),
-                    ),
-                  ],
-                )
-              )
-            ),
-            ListTile(
-              leading: CircleAvatar(
-                radius: 12,
-                child: Text(
-                    'AR',
-                    style: TextStyle(
-                      fontSize: 10,
-                      color: Colors.white,
-                    )
-                ),
-                backgroundColor: Colors.grey,
-              ),
-              title: const Text('Profile'),
-
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
-              },
-            ),
-            Divider(
-              color: Colors.black,
-            ),
-            ListTile(
-              leading: Icon(Icons.settings),
-              title: const Text('Settings'),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.exit_to_app),
-              title: const Text('Export'),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.delete_forever_sharp),
-              title: const Text('Delete & Reset'),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.info_outline),
-              title: const Text('About'),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: HamburgerDrawer(),
       appBar: AppBar(
         title: Text(
             "MONKE",
@@ -252,13 +91,10 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ]
       ),
-
-
-
 //////////////////////////////// Body /////////////////////////////////////////
       body: SingleChildScrollView(
-    child: Column(
-        children: <Widget>[
+        child: Column(
+          children: <Widget>[
           //////////////////////////////// INCOME EXPENSE TOTAL /////////////////////////////////////////
           Container(
             padding: EdgeInsets.all(15.0),
@@ -327,8 +163,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
 
 
-
-
           //////////////////////////////// DATE AND TIME /////////////////////////////////////////
           Container(
             padding: EdgeInsets.fromLTRB(5, 5, 5, 0),
@@ -378,14 +212,11 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
 
 
-
-
           //////////////////////////////// CONTENT /////////////////////////////////////////
           SingleChildScrollView(
             child: Container(
               child: Column(
-                children: records.map((record) => recordTemplate(record)).toList(),
-              ),
+                children: records.map((record) => RecordCard(record: record)).toList(),),
             )
           )
 
@@ -394,3 +225,5 @@ class _MyHomePageState extends State<MyHomePage> {
     ));
   }
 }
+
+
