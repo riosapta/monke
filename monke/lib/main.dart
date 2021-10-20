@@ -54,6 +54,130 @@ class _MyHomePageState extends State<MyHomePage> {
     return RecordCard();
   }
 
+  void showFilterBy(BuildContext context) => showDialog(
+    context: context, barrierDismissible: false,  builder: (BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Container(
+        height: 451.0,
+        width: 500.0,
+        padding: EdgeInsets.all(10.0),
+        child: Column(
+            children: [
+              Text('Display Options'),
+              Divider(
+                color: Colors.black,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  TextButton(
+                    onPressed: () {},
+                    child: Text('Daily'),
+                    style: ButtonStyle(
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {},
+                    child: Text('Weekly'),
+                    style: ButtonStyle(
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {},
+                    child: Text('Monthly'),
+                    style: ButtonStyle(
+                    ),
+                  ),
+                ],
+              ),
+              Container(padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+              child: Column(
+                children: [
+                  Text('Filters'),
+                  Divider(
+                    color: Colors.black,
+                  ),
+                  Text('By Time'),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text('From:'),
+                      TextButton(
+                        onPressed: () => _selectDate(context),
+                        child: Text("${selectedDate.toLocal()}".split(' ')[0]),
+                      ),
+                      Text('From:'),
+                      TextButton(
+                        onPressed: () => _selectDate(context),
+                        child: Text("${selectedDate.toLocal()}".split(' ')[0]),
+                      ),
+                    ]
+                  ),
+                  Text('By Category'),
+                  TextButton(
+                    onPressed: () {},
+                    child: Text('Select Category'),
+                    style: ButtonStyle(
+                    ),
+                  ),
+                  Text('By Type'),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      TextButton(
+                        onPressed: () {},
+                        child: Text('Expense'),
+                        style: ButtonStyle(
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {},
+                        child: Text('Income'),
+                        style: ButtonStyle(
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {},
+                        child: Text('Transfer'),
+                        style: ButtonStyle(
+                        ),
+                      ),
+                    ],
+                  ),
+                  Text('By Account'),
+                  TextButton(
+                    onPressed: () {},
+                    child: Text('Select Category'),
+                    style: ButtonStyle(
+                    ),
+                  ),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        TextButton(
+                          onPressed: () {},
+                          child: Text('Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () {},
+                          child: Text('Confirm'),
+                        ),
+                      ]
+                  )
+                ]
+              )
+              )
+            ]
+        ),
+      ),
+    );
+  }
+  );
+
+
   int _selectedIndex = 0;
 
   //////////////////////////////// HomePage /////////////////////////////////////////
@@ -226,7 +350,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
       //////////////////////////////// FLOATING ACTION BUTTON /////////////////////////////////////////
       floatingActionButton:  FloatingActionButton.extended(
-        onPressed: () { },
+        onPressed: () => showFilterBy(context),
         icon: Icon(Icons.add_circle_outline),
         label: Text('Add New Records',
             style:TextStyle(
