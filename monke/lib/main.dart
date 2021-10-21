@@ -43,6 +43,10 @@ class _MyHomePageState extends State<MyHomePage> {
   String selectedAccount = 'Select Account';
   DateTime selectedDate = DateTime.now();
 
+  List<String> lst = ['Daily','Weekly','Monthly'];
+  List<String> lstTwo = ['Expense','Income','Transfer'];
+  int secondaryIndex = 0;
+
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
         context: context,
@@ -362,29 +366,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     color: Colors.black,
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      TextButton(
-                        onPressed: () {},
-                        child:
-                        Text('Daily'),
-                        style: ButtonStyle(
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {},
-                        child:
-                        Text('Weekly'),
-                        style: ButtonStyle(
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {},
-                        child:
-                        Text('Monthly'),
-                        style: ButtonStyle(
-                        ),
-                      ),
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      customRadio2(lst[0], 0),
+                      customRadio2(lst[1], 1),
+                      customRadio2(lst[2], 2),
                     ],
                   ),
                   Container(padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
@@ -526,6 +512,19 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   );
 
+  void changeSecondaryIndex(int index){
+    setState(() {
+      secondaryIndex = index;
+    });
+  }
+  Widget customRadio2(String txt,int index){
+    return OutlineButton(
+      onPressed: () => changeSecondaryIndex(index),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+      borderSide: BorderSide(color: secondaryIndex == index ? Colors.teal : Colors.grey),
+      child: Text(txt,style: TextStyle(color: secondaryIndex == index ?Colors.teal : Colors.grey),),
+    );
+  }
 
   int _selectedIndex = 0;
 
