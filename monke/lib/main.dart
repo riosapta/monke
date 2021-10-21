@@ -39,6 +39,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   List<Widget> itemsData = [];
+  String selectedCategory = 'Select Category';
+  String selectedAccount = 'Select Account';
   DateTime selectedDate = DateTime.now();
 
   Future<void> _selectDate(BuildContext context) async {
@@ -123,6 +125,216 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void categoryButtonPressed(){
+    showModalBottomSheet<dynamic>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20),),
+        ),
+        context: context,
+        builder: (context){
+          return Padding(
+              padding: EdgeInsets.symmetric(horizontal: 15.0),
+              child:
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          Expanded(
+                            flex:1,
+                            child: IconButton(
+                              icon: const Icon(Icons.cancel_outlined),
+                              onPressed: () => Navigator.pop(context),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 10,
+                            child: Center(
+                              child: Text('Select a Category'),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Text(''),
+                          ),
+                        ]
+                    ),
+                    Divider(
+                      color: Colors.black,
+                      height: 0,
+                    ),
+                    Expanded(
+                      child: SizedBox(
+                        height: 700,
+                        child: ListView(
+                          children: <Widget>[
+                            ListTile(
+                              leading: Icon(Icons.circle),
+                              title: Text('Category S'),
+                              onTap: () => selectCategory('Category S'),
+                            ),
+                            ListTile(
+                              leading: Icon(Icons.circle),
+                              title: Text('Category T'),
+                              onTap: () => selectCategory('Category T'),
+                            ),
+                            ListTile(
+                              leading: Icon(Icons.circle),
+                              title: Text('Category U'),
+                              onTap: () => selectCategory('Category U'),
+                            ),
+                            ListTile(
+                              leading: Icon(Icons.circle),
+                              title: Text('Category V'),
+                              onTap: () => selectCategory('Category V'),
+                            ),
+                            ListTile(
+                              leading: Icon(Icons.circle),
+                              title: Text('Category W'),
+                              onTap: () => selectCategory('Category W'),
+                            ),
+                            ListTile(
+                              leading: Icon(Icons.circle),
+                              title: Text('Category X'),
+                              onTap: () => selectCategory('Category X'),
+                            ),
+                            ListTile(
+                              leading: Icon(Icons.circle),
+                              title: Text('Category Y'),
+                              onTap: () => selectCategory('Category Y'),
+                            ),
+                            ListTile(
+                              leading: Icon(Icons.circle),
+                              title: Text('Category Z'),
+                              onTap: () => selectCategory('Category Z'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Divider(
+                      color: Colors.black,
+                      height: 0,
+                    ),
+                    TextButton.icon(
+                      onPressed: () {},
+                      icon: Icon(Icons.add_circle_outline, color: Colors.black),
+                      label: Text('Add New Records',
+                          style:TextStyle(
+                            fontSize: 12,
+                            color: Colors.black,
+                          )),
+                      style:TextButton.styleFrom(
+                        minimumSize: Size(500, 0)
+                      ),
+                    ),
+                  ]
+                ),
+          );
+        });
+  }
+
+  void selectCategory(String name){
+    Navigator.pop(context);
+    setState(() {
+      selectedCategory = name;
+    });
+  }
+
+  void accountButtonPressed(){
+    showModalBottomSheet<dynamic>(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20),),
+        ),
+        context: context,
+        builder: (context){
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15.0),
+            child:
+            Column(
+                mainAxisSize: MainAxisSize.min,
+
+                children: <Widget>[
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Expanded(
+                          flex:1,
+                          child: IconButton(
+                            icon: const Icon(Icons.cancel_outlined),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 10,
+                          child: Center(
+                            child: Text('Select an Account'),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Text(''),
+                        ),
+                      ]
+                  ),
+                  Divider(
+                    color: Colors.black,
+                    height: 0,
+                  ),
+                  Expanded(
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.75,
+                      child: ListView(
+                        children: <Widget>[
+                          ListTile(
+                            leading: Icon(Icons.circle),
+                            title: Text('Cash'),
+                            onTap: () => selectAccount('Cash'),
+                          ),
+                          ListTile(
+                            leading: Icon(Icons.circle),
+                            title: Text('Bank'),
+                            onTap: () => selectAccount('Bank'),
+                          ),
+                          ListTile(
+                            leading: Icon(Icons.circle),
+                            title: Text('Saving'),
+                            onTap: () => selectAccount('Saving'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Divider(
+                    color: Colors.black,
+                    height: 0,
+                  ),
+                  TextButton.icon(
+                    onPressed: () {},
+                    icon: Icon(Icons.add_circle_outline, color: Colors.black),
+                    label: Text('Add New Records',
+                        style:TextStyle(
+                          fontSize: 12,
+                          color: Colors.black,
+                        )),
+                    style:TextButton.styleFrom(
+                        minimumSize: Size(500, 0)
+                    ),
+                  ),
+                ]
+            ),
+          );
+        });
+  }
+
+  void selectAccount(String name){
+    Navigator.pop(context);
+    setState(() {
+      selectedAccount = name;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -130,173 +342,187 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void showFilterBy(BuildContext context) => showDialog(
-    context: context, barrierDismissible: false,  builder: (BuildContext context) {
-    return Dialog(
-
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Container(
-        height: 451.0,
-        width: 500.0,
-        padding: EdgeInsets.all(10.0),
-        child: Column(
-            children: [
-              Text('Display Options'),
-              Divider(
-                color: Colors.black,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return StatefulBuilder(
+      builder: (context, setState) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Container(
+            height: 451.0,
+            width: 500.0,
+            padding: EdgeInsets.all(10.0),
+            child: Column(
                 children: [
-                  TextButton(
-                    onPressed: () {},
-                    child:
-                      Text('Daily'),
-                    style: ButtonStyle(
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {},
-                    child:
-                      Text('Weekly'),
-                    style: ButtonStyle(
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {},
-                    child:
-                      Text('Monthly'),
-                    style: ButtonStyle(
-                    ),
-                  ),
-                ],
-              ),
-              Container(padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-              child: Column(
-                children: [
-                  Text('Filters'),
+                  Text('Display Options'),
                   Divider(
                     color: Colors.black,
-                  ),
-                  Text(
-                    'By Time',
-                    style: TextStyle(
-                      color: Colors.grey,
-                    ),
-                  ),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text(
-                        'From:',
-                        style: TextStyle(
-                          color: Colors.grey,
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () => _selectDate(context),
-                        child: Text("${selectedDate.toLocal()}".split(' ')[0]),
-                      ),
-                      Text(
-                        'to:',
-                        style: TextStyle(
-                          color: Colors.grey,
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () => _selectDate(context),
-                        child: Text("${selectedDate.toLocal()}".split(' ')[0]),
-                      ),
-                    ]
-                  ),
-                  Text(
-                    'By Category',
-                    style: TextStyle(
-                      color: Colors.grey,
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {},
-                    child: Text('Select Category'),
-                    style: ButtonStyle(
-                    ),
-                  ),
-                  Text(
-                    'By Type',
-                    style: TextStyle(
-                      color: Colors.grey,
-                    ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       TextButton(
                         onPressed: () {},
-                        child: Text('Expense'),
+                        child:
+                        Text('Daily'),
                         style: ButtonStyle(
                         ),
                       ),
                       TextButton(
                         onPressed: () {},
-                        child: Text('Income'),
+                        child:
+                        Text('Weekly'),
                         style: ButtonStyle(
                         ),
                       ),
                       TextButton(
                         onPressed: () {},
-                        child: Text('Transfer'),
+                        child:
+                        Text('Monthly'),
                         style: ButtonStyle(
                         ),
                       ),
                     ],
                   ),
-                  Text(
-                    'By Account',
-                    style: TextStyle(
-                      color: Colors.grey,
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {},
-                    child: Text('Select Category'),
-                    style: ButtonStyle(
-                    ),
-                  ),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child:
+                  Container(padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                      child: Column(
+                          children: [
+                            Text('Filters'),
+                            Divider(
+                              color: Colors.black,
+                            ),
                             Text(
-                              'Cancel',
+                              'By Time',
                               style: TextStyle(
-                                color: Colors.black,
+                                color: Colors.grey,
                               ),
                             ),
-                        ),
-                        TextButton(
-                          onPressed: () {},
-                          child:
+                            Row(
+                                mainAxisAlignment: MainAxisAlignment
+                                    .spaceAround,
+                                children: [
+                                  Text(
+                                    'From:',
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () => _selectDate(context),
+                                    child: Text(
+                                        "${selectedDate.toLocal()}".split(
+                                            ' ')[0]),
+                                  ),
+                                  Text(
+                                    'to:',
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () => _selectDate(context),
+                                    child: Text(
+                                        "${selectedDate.toLocal()}".split(
+                                            ' ')[0]),
+                                  ),
+                                ]
+                            ),
                             Text(
-                              'Confirm',
+                              'By Category',
                               style: TextStyle(
-                                color: Colors.black,
+                                color: Colors.grey,
                               ),
                             ),
-                        ),
-                      ]
+                            TextButton(
+                              onPressed: () => setState((){
+                                categoryButtonPressed();
+                              }),
+                              child: Text('$selectedCategory'),
+                              style: ButtonStyle(
+                              ),
+                            ),
+                            Text(
+                              'By Type',
+                              style: TextStyle(
+                                color: Colors.grey,
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                TextButton(
+                                  onPressed: () {},
+                                  child: Text('Expense'),
+                                  style: ButtonStyle(
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {},
+                                  child: Text('Income'),
+                                  style: ButtonStyle(
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {},
+                                  child: Text('Transfer'),
+                                  style: ButtonStyle(
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Text(
+                              'By Account',
+                              style: TextStyle(
+                                color: Colors.grey,
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () => setState((){
+                                accountButtonPressed();
+                              }),
+                              child: Text('$selectedAccount'),
+                              style: ButtonStyle(
+                              ),
+                            ),
+                            Row(
+                                mainAxisAlignment: MainAxisAlignment
+                                    .spaceAround,
+                                children: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child:
+                                    Text(
+                                      'Cancel',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {},
+                                    child:
+                                    Text(
+                                      'Confirm',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ]
+                            )
+                          ]
+                      )
                   )
                 ]
-              )
-              )
-            ]
-        ),
-      ),
-    );
+            ),
+          ),
+        );
+      });
   }
   );
 
@@ -437,7 +663,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           icon: const Icon(Icons.keyboard_arrow_right_rounded),
                             onPressed: () {
                               setState(() {
-                                selectedDate = selectedDate.subtract(const Duration(days: 1));
+                                selectedDate = selectedDate.add(const Duration(days: 1));
                               });
                             }
                         ),
@@ -529,6 +755,4 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-
-
 
