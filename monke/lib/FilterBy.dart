@@ -10,20 +10,48 @@ class _FilterByState extends State<FilterBy>{
   String selectedCategory = 'Select Category';
   String selectedAccount = 'Select Account';
   DateTime selectedDate = DateTime.now();
+  DateTime selectedDateTo = DateTime.now();
+  DateTime selectedDateFrom = DateTime.now();
+
+  //displayOpt = 0 daily, 1 weekly, 2 monthly
+  int displayOpt = 0;
+  //typeOpt = 0 all, 1 expense, 2 income, 3 transfer
+  int typeOpt = 0;
 
   List<String> lst = ['Daily','Weekly','Monthly'];
   List<String> lstTwo = ['Expense','Income','Transfer'];
   int secondaryIndex = 0;
 
-  Future<void> _selectDate(BuildContext context) async {
+  void _reset() {
+    Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        transitionDuration: Duration.zero,
+        pageBuilder: (_, __, ___) => FilterBy(),
+      ),
+    );
+  }
+  Future<void> _selectDateTo(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
         firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
+        lastDate: DateTime(2035));
     if (picked != null && picked != selectedDate)
       setState(() {
-        selectedDate = picked;
+        selectedDateTo = picked;
+      });
+  }
+
+  Future<void> _selectDateFrom(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2035));
+    if (picked != null && picked != selectedDate && picked.isAfter(selectedDateTo))
+      setState(() {
+        selectedDateFrom = picked;
       });
   }
 
@@ -250,9 +278,6 @@ class _FilterByState extends State<FilterBy>{
     );
   }
 
-  int _selectedIndex = 0;
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -269,13 +294,12 @@ class _FilterByState extends State<FilterBy>{
         ),
         body: Center(
           child: Container(
-            padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+            padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
             child: Column(
-                //mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text('Display Options',
                     style: TextStyle(
-                      fontSize: 12,
                     ),),
                   Divider(
                     color: Colors.black,
@@ -288,12 +312,11 @@ class _FilterByState extends State<FilterBy>{
                       customRadio2(lst[2], 2),
                     ],
                   ),
-                  Container(padding: EdgeInsets.fromLTRB(0, 55, 0, 0),
+                  Container(padding: EdgeInsets.fromLTRB(0, 35, 0, 0),
                       child: Column(
                           children: [
                             Text('Filters',
                               style: TextStyle(
-                                fontSize: 12,
                               ),),
                             Divider(
                               color: Colors.black,
@@ -302,7 +325,6 @@ class _FilterByState extends State<FilterBy>{
                               'By Time',
                               style: TextStyle(
                                 color: Colors.grey,
-                                fontSize: 12,
                               ),
                             ),
                             Row(
@@ -317,9 +339,9 @@ class _FilterByState extends State<FilterBy>{
                                     ),
                                   ),
                                   TextButton(
-                                    onPressed: () => _selectDate(context),
+                                    onPressed: () => _selectDateTo(context),
                                     child: Text(
-                                        "${selectedDate.toLocal()}".split(
+                                        "${selectedDateTo.toLocal()}".split(
                                             ' ')[0]),
                                   ),
                                   Text(
@@ -329,9 +351,9 @@ class _FilterByState extends State<FilterBy>{
                                     ),
                                   ),
                                   TextButton(
-                                    onPressed: () => _selectDate(context),
+                                    onPressed: () => _selectDateFrom(context),
                                     child: Text(
-                                        "${selectedDate.toLocal()}".split(
+                                        "${selectedDateFrom.toLocal()}".split(
                                             ' ')[0]),
                                   ),
                                 ]
@@ -394,17 +416,35 @@ class _FilterByState extends State<FilterBy>{
                               ),
                             ),
                             Container(
-                              padding: EdgeInsets.only(top: 55.0),
-                              child: ElevatedButton.icon(
-                                onPressed: () {
-
-                                },
-                                icon: Icon(Icons.filter_list_alt),
-                                label: Text('Filter',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                    )
-                                ),
+                              padding: EdgeInsets.only(top: 25.0),
+                              child: Column(
+                                children: [
+                                  ElevatedButton.icon(
+                                    onPressed: () {
+                                     _reset();
+                                    },
+                                    style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Colors.red)),
+                                    icon: Icon(Icons.clear),
+                                    label: Text('Clear Filter',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        )
+                                    ),
+                                  ),
+                                  ElevatedButton.icon(
+                                    onPressed: () {
+                                      Navigator.pushReplacementNamed(context, '/', arguments: {
+                                        //'displayOpt': instance.displayOpt
+                                      });
+                                    },
+                                    icon: Icon(Icons.filter_list_alt),
+                                    label: Text('Confirm Filter',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        )
+                                    ),
+                                  )
+                                ]
                               )
                             )
                           ]
