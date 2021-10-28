@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'record.dart';
+//import 'record.dart';
 import 'HamburgerDrawer.dart';
 import 'RecordCard.dart';
 import 'recordsData.dart';
 import 'FilterBy.dart';
+import 'MainFunctions/Balance.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'AddRecords/AddRecord.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,6 +33,7 @@ class MyApp extends StatelessWidget {
               title: 'Homepage',
             ),
         '/filterby': (context) => FilterBy(),
+        '/addrecord': (context) => AddRecord(),
       },
     );
   }
@@ -142,29 +146,6 @@ class _MyHomePageState extends State<MyHomePage> {
   //////////////////////////////// HomePage /////////////////////////////////////////
   @override
   Widget build(BuildContext context) {
-    List<Record> records = [
-      Record(
-          recordDate: selectedDate,
-          category: 'Income',
-          account: 'Bank',
-          amount: 100000),
-      Record(
-          recordDate: DateTime.utc(2021, 10, 20),
-          category: 'Expense',
-          account: 'Bank',
-          amount: 200000),
-      Record(
-          recordDate: DateTime.utc(2021, 10, 20),
-          category: 'Income',
-          account: 'Cash',
-          amount: 300000),
-      Record(
-          recordDate: DateTime.utc(2021, 10, 22),
-          category: 'Income',
-          account: 'Cash',
-          amount: 400000),
-    ];
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       //////////////////////////////// AppBar /////////////////////////////////////////
@@ -182,7 +163,10 @@ class _MyHomePageState extends State<MyHomePage> {
               icon: const Icon(Icons.search),
               onPressed: () {},
             ),
-          ]),
+          ]
+      ),
+
+
 //////////////////////////////// Body /////////////////////////////////////////
       body:
           // SingleChildScrollView(
@@ -190,52 +174,8 @@ class _MyHomePageState extends State<MyHomePage> {
           Column(
         children: <Widget>[
           //////////////////////////////// INCOME EXPENSE TOTAL /////////////////////////////////////////
-          Container(
-              padding: EdgeInsets.all(15.0),
-              color: Colors.teal[400],
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    Column(children: <Widget>[
-                      Text('INCOME',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15.0,
-                          )),
-                      Text('Rp5.000.000,00',
-                          style: TextStyle(
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white,
-                          )),
-                    ]),
-                    Column(children: <Widget>[
-                      Text('EXPENSE',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15.0,
-                          )),
-                      Text('Rp210.000,00',
-                          style: TextStyle(
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white,
-                          )),
-                    ]),
-                    Column(children: <Widget>[
-                      Text('TOTAL',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15.0,
-                          )),
-                      Text('Rp4.790.000,00',
-                          style: TextStyle(
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white,
-                          )),
-                    ]),
-                  ])),
+          Balance(),
+          // balance gw pindahin keluar, biar bisa dipake banyak page.
 
           //////////////////////////////// DATE AND TIME /////////////////////////////////////////
           Container(
@@ -289,12 +229,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
 
           //////////////////////////////// CONTENT /////////////////////////////////////////
-          // SingleChildScrollView(
-          //   child: Container(
-          //     child: Column(
-          //       children: records.map((record) => RecordCard(record: record)).toList(),),
-          //   ),
-          // ),
           Expanded(
               child: StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
@@ -314,11 +248,9 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
 
-      // ),
-
       //////////////////////////////// FLOATING ACTION BUTTON /////////////////////////////////////////
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
+        onPressed: () => Navigator.pushNamed(context, '/addrecord'),
         icon: Icon(Icons.add_circle_outline, color: Colors.black),
         label: Text('Add New Records',
             style: TextStyle(

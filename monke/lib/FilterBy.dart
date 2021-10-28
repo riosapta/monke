@@ -9,9 +9,10 @@ class FilterBy extends StatefulWidget{
 class _FilterByState extends State<FilterBy>{
   String selectedCategory = 'Select Category';
   String selectedAccount = 'Select Account';
-  DateTime selectedDate = DateTime.now();
-  DateTime selectedDateTo = DateTime.now();
-  DateTime selectedDateFrom = DateTime.now();
+  DateTimeRange dateRange = DateTimeRange(
+    start: DateTime.now(),
+    end: DateTime.now().add(Duration(hours: 24 * 3)),
+  );
 
   //displayOpt = 0 daily, 1 weekly, 2 monthly
   int displayOpt = 0;
@@ -19,7 +20,7 @@ class _FilterByState extends State<FilterBy>{
   int typeOpt = 0;
 
   List<String> lst = ['Daily','Weekly','Monthly'];
-  List<String> lstTwo = ['Expense','Income','Transfer'];
+  List<String> lstTwo = ['Income','Expense','Transfer'];
   int secondaryIndex = 0;
 
   void _reset() {
@@ -31,29 +32,19 @@ class _FilterByState extends State<FilterBy>{
       ),
     );
   }
-  Future<void> _selectDateTo(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2035));
-    if (picked != null && picked != selectedDate)
-      setState(() {
-        selectedDateTo = picked;
-      });
+
+  Future _selectDateRange(BuildContext context) async {
+    final newDateRange = await showDateRangePicker(
+      context: context,
+      firstDate: DateTime(2015, 8),
+      lastDate: DateTime(2035),
+    );
+    if (newDateRange == null) return;
+    setState(() {
+      dateRange = newDateRange;
+    });
   }
 
-  Future<void> _selectDateFrom(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2035));
-    if (picked != null && picked != selectedDate && picked.isAfter(selectedDateTo))
-      setState(() {
-        selectedDateFrom = picked;
-      });
-  }
 
   void categoryButtonPressed(){
     showModalBottomSheet<dynamic>(
@@ -285,8 +276,8 @@ class _FilterByState extends State<FilterBy>{
           title: Text(
             "Filter By",
             style: TextStyle(
-              fontFamily: 'Quicksand',
-              fontWeight: FontWeight.bold,
+              //fontFamily: 'Quicksand',
+              //fontWeight: FontWeight.bold,
               fontSize: 20.0,
             )
           ),
@@ -339,9 +330,9 @@ class _FilterByState extends State<FilterBy>{
                                     ),
                                   ),
                                   TextButton(
-                                    onPressed: () => _selectDateTo(context),
+                                    onPressed: () => _selectDateRange(context),
                                     child: Text(
-                                        "${selectedDateTo.toLocal()}".split(
+                                        "${dateRange.start.toLocal()}".split(
                                             ' ')[0]),
                                   ),
                                   Text(
@@ -351,9 +342,9 @@ class _FilterByState extends State<FilterBy>{
                                     ),
                                   ),
                                   TextButton(
-                                    onPressed: () => _selectDateFrom(context),
+                                    onPressed: () => _selectDateRange(context),
                                     child: Text(
-                                        "${selectedDateFrom.toLocal()}".split(
+                                        "${dateRange.end.toLocal()}".split(
                                             ' ')[0]),
                                   ),
                                 ]
@@ -433,6 +424,8 @@ class _FilterByState extends State<FilterBy>{
                                   ),
                                   ElevatedButton.icon(
                                     onPressed: () {
+                                      print(Text('Display Opt: $displayOpt'));
+                                      print(Text('Type Opt: $typeOpt'));
                                       Navigator.pushReplacementNamed(context, '/', arguments: {
                                         // put shit to pass here.
                                       });
