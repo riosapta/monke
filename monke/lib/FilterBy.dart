@@ -434,7 +434,7 @@ class _FilterByState extends State<FilterBy>{
                                   ElevatedButton.icon(
                                     onPressed: () {
                                       Navigator.pushReplacementNamed(context, '/', arguments: {
-                                        //'displayOpt': instance.displayOpt
+                                        // put shit to pass here.
                                       });
                                     },
                                     icon: Icon(Icons.filter_list_alt),
