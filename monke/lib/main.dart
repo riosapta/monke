@@ -16,7 +16,7 @@ void main() async {
   runApp(const MyApp());
 }
 
-//////////////////////////////// Wrapper Classes /////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////  Wrapper Classes
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -49,6 +49,87 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  int _selectedIndex = 0;
+
+  final tabs = [
+    mainPage(),
+    Text('Test2'),
+    Text('Test3'),
+    Text('Test4'),
+  ];
+
+  ///////////////////////////////////////////////////////////////////////////////////////////////// WIDGET BUILD MAINFRAME
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      ///////////////////////////////////////////////////////////////////////// AppBar
+      drawer: HamburgerDrawer(),
+      appBar: AppBar(
+          title: Text("MONKE",
+              style: TextStyle(
+                fontFamily: 'Quicksand',
+                fontWeight: FontWeight.bold,
+                fontSize: 30.0,
+              )),
+          centerTitle: true,
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: () {},
+            ),
+          ]
+      ),
+
+/////////////////////////////////////////////////////////////////////////  Body
+      body: tabs[_selectedIndex],
+
+      /////////////////////////////////////////////////////////////////////////  BOTTOM NAVIGATION BAR
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.teal[400],
+        unselectedItemColor: Colors.white,
+        selectedItemColor: Colors.amber[200],
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.event_note_sharp),
+            label: 'Records',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_balance_wallet_outlined),
+            label: 'Accounts',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.show_chart),
+            label: 'Analysis',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.event_note_sharp),
+            label: 'Categories',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+      ),
+    );
+  }
+}
+
+class mainPage extends StatefulWidget{
+  @override
+  State<StatefulWidget> createState() => _mainPageState();
+}
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////  MAINPAGE CLASS
+
+class _mainPageState extends State<mainPage> {
   List<Widget> itemsData = [];
   DateTime selectedDate = DateTime.now();
 
@@ -110,7 +191,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   padding: EdgeInsets.all(10),
                                   child: Column(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      CrossAxisAlignment.start,
                                       children: <Widget>[
                                         Text(doc["jenis_trx"],
                                             style: TextStyle(
@@ -141,43 +222,21 @@ class _MyHomePageState extends State<MyHomePage> {
     getPostsData();
   }
 
-  int _selectedIndex = 0;
 
-  //////////////////////////////// HomePage /////////////////////////////////////////
+
+
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////  MAINPAGE BUILD
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      //////////////////////////////// AppBar /////////////////////////////////////////
-      drawer: HamburgerDrawer(),
-      appBar: AppBar(
-          title: Text("MONKE",
-              style: TextStyle(
-                fontFamily: 'Quicksand',
-                fontWeight: FontWeight.bold,
-                fontSize: 30.0,
-              )),
-          centerTitle: true,
-          actions: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.search),
-              onPressed: () {},
-            ),
-          ]
-      ),
-
-
-//////////////////////////////// Body /////////////////////////////////////////
-      body:
-          // SingleChildScrollView(
-          //   child:
-          Column(
+      body: Column(
         children: <Widget>[
-          //////////////////////////////// INCOME EXPENSE TOTAL /////////////////////////////////////////
+          ///////////////////////////////////////////////////////////////////////// BALANCE
           Balance(),
           // balance gw pindahin keluar, biar bisa dipake banyak page.
 
-          //////////////////////////////// DATE AND TIME /////////////////////////////////////////
+          ///////////////////////////////////////////////////////////////////////// DATE AND TIME
           Container(
             padding: EdgeInsets.fromLTRB(5, 5, 5, 0),
             child: Row(
@@ -199,11 +258,11 @@ class _MyHomePageState extends State<MyHomePage> {
                         TextButton(
                           onPressed: () => _selectDate(context),
                           child:
-                              Text("${selectedDate.toLocal()}".split(' ')[0]),
+                          Text("${selectedDate.toLocal()}".split(' ')[0]),
                         ),
                         IconButton(
                             icon:
-                                const Icon(Icons.keyboard_arrow_right_rounded),
+                            const Icon(Icons.keyboard_arrow_right_rounded),
                             onPressed: () {
                               setState(() {
                                 selectedDate =
@@ -228,27 +287,27 @@ class _MyHomePageState extends State<MyHomePage> {
             color: Colors.black,
           ),
 
-          //////////////////////////////// CONTENT /////////////////////////////////////////
+          /////////////////////////////////////////////////////////////////////////  CONTENT
           Expanded(
               child: StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection('transactions')
-                .snapshots(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) return const Text('Loading...');
-              return ListView.builder(
-                itemCount: itemsData.length,
-                physics: BouncingScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return itemsData[index];
+                stream: FirebaseFirestore.instance
+                    .collection('transactions')
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) return const Text('Loading...');
+                  return ListView.builder(
+                    itemCount: itemsData.length,
+                    physics: BouncingScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return itemsData[index];
+                    },
+                  );
                 },
-              );
-            },
-          )),
+              )),
         ],
       ),
 
-      //////////////////////////////// FLOATING ACTION BUTTON /////////////////////////////////////////
+      ///////////////////////////////////////////////////////////////////////// FLOATING ACTION BUTTON
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => Navigator.pushNamed(context, '/addrecord'),
         icon: Icon(Icons.add_circle_outline, color: Colors.black),
@@ -260,38 +319,6 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Colors.amber[200],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-
-      //////////////////////////////// BOTTOM NAVIGATION BAR /////////////////////////////////////////
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.teal[400],
-        unselectedItemColor: Colors.white,
-        selectedItemColor: Colors.amber[200],
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.event_note_sharp),
-            label: 'Records',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_balance_wallet_outlined),
-            label: 'Accounts',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.show_chart),
-            label: 'Analysis',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.event_note_sharp),
-            label: 'Categories',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-      ),
     );
   }
 }
