@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-//import 'record.dart';
-import 'HamburgerDrawer.dart';
-import 'RecordCard.dart';
-import 'recordsData.dart';
-import 'FilterBy.dart';
-import 'MainFunctions/Balance.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'FilterBy.dart';
 import 'AddRecords/AddRecord.dart';
+import 'MainFunctions/HamburgerDrawer.dart';
+import 'MainFunctions/Balance.dart';
+import 'Accounts/mainAccounts.dart';
+import 'Analysis/mainAnalysis.dart';
+import 'Categories/mainCategories.dart';
+
 
 
 void main() async {
@@ -53,9 +54,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final tabs = [
     mainPage(),
-    Text('Test2'),
-    Text('Test3'),
-    Text('Test4'),
+    mainAccounts(),
+    mainAnalysis(),
+    mainCategories(),
   ];
 
   ///////////////////////////////////////////////////////////////////////////////////////////////// WIDGET BUILD MAINFRAME
@@ -145,12 +146,8 @@ class _mainPageState extends State<mainPage> {
       });
   }
 
-  Widget recordTemplate(record) {
-    return RecordCard();
-  }
-
   void getPostsData() {
-    List<dynamic> responseList = RECORDS_DATA;
+    //List<dynamic> responseList = RECORDS_DATA;
     List<Widget> listItems = [];
     FirebaseFirestore.instance
         .collection('transactions')
@@ -159,56 +156,61 @@ class _mainPageState extends State<mainPage> {
       querySnapshot.docs.forEach((doc) {
         listItems.add(Card(
             margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Text(
-                      "${doc["tanggal_trx"].toDate()}".split(' ')[0],
-                      style: TextStyle(
-                        fontSize: 12,
+            child: new InkWell(
+              onTap: () {print('tapped');},
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Text(
+                        "${doc["tanggal_trx"].toDate()}".split(' ')[0],
+                        style: TextStyle(
+                          fontSize: 12,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 6.0),
-                    Divider(
-                      color: Colors.black,
-                    ),
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          CircleAvatar(
-                            radius: 15,
-                            child: Text('AR',
+                      SizedBox(height: 6.0),
+                      Divider(
+                        color: Colors.black,
+                      ),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            CircleAvatar(
+                              radius: 15,
+                              child: Text('AR',
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    color: Colors.white,
+                                  )),
+                              backgroundColor: Colors.grey,
+                            ),
+                            Expanded(
+                                child: Container(
+                                    padding: EdgeInsets.all(10),
+                                    child: Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Text(doc["jenis_trx"],
+                                              style: TextStyle(
+                                                fontSize: 13,
+                                              )),
+                                          Text(doc["akun_trx"],
+                                              style: TextStyle(
+                                                fontSize: 10,
+                                              )),
+                                        ]))),
+                            Text('Rp${doc["jumlah_trx"]}',
                                 style: TextStyle(
-                                  fontSize: 10,
-                                  color: Colors.white,
+                                  fontSize: 20,
                                 )),
-                            backgroundColor: Colors.grey,
-                          ),
-                          Expanded(
-                              child: Container(
-                                  padding: EdgeInsets.all(10),
-                                  child: Column(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Text(doc["jenis_trx"],
-                                            style: TextStyle(
-                                              fontSize: 13,
-                                            )),
-                                        Text(doc["akun_trx"],
-                                            style: TextStyle(
-                                              fontSize: 10,
-                                            )),
-                                      ]))),
-                          Text('Rp${doc["jumlah_trx"]}',
-                              style: TextStyle(
-                                fontSize: 20,
-                              )),
-                        ])
-                  ]),
-            )));
+                          ])
+                    ]),
+              )
+            )
+        )
+        );
       });
     });
     setState(() {
@@ -303,7 +305,8 @@ class _mainPageState extends State<mainPage> {
                     },
                   );
                 },
-              )),
+              )
+          ),
         ],
       ),
 
