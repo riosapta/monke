@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+
+
+/////////////// PAGES IMPORT
 import 'FilterBy.dart';
 import 'MainFunctions/HamburgerDrawer.dart';
 import 'MainFunctions/Balance.dart';
@@ -12,6 +15,10 @@ import 'Authentication/mainAuthentication.dart';
 import 'Authentication/Login.dart';
 import 'Authentication/Signup.dart';
 import 'DrawerPages/Profile.dart';
+import 'DrawerPages/SettingsPage.dart';
+import 'DrawerPages/Export.dart';
+import 'DrawerPages/DeleteReset.dart';
+import 'DrawerPages/About.dart';
 
 
 void main() async {
@@ -42,6 +49,10 @@ class MyApp extends StatelessWidget {
         '/authentication/login': (context) => Login(),
         '/authentication/signup': (context) => Signup(),
         '/profile': (context) => Profile(),
+        '/settings': (context) => SettingsPage(),
+        '/export': (context) => Export(),
+        '/deletereset': (context) => DeleteReset(),
+        '/about': (context) => About(),
       },
     );
   }

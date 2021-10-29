@@ -91,40 +91,32 @@ class HamburgerDrawer extends StatelessWidget {
             leading: Icon(Icons.settings),
             title: const Text('Settings'),
             onTap: () {
-              // Update the state of the app
-              // ...
-              // Then close the drawer
-              Navigator.pop(context);
+              Navigator.pushNamed(context, '/settings');
+              //Navigator.pop(context);
             },
           ),
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: const Text('Export'),
             onTap: () {
-              // Update the state of the app
-              // ...
-              // Then close the drawer
-              Navigator.pop(context);
+              Navigator.pushNamed(context, '/export');
+              //Navigator.pop(context);
             },
           ),
           ListTile(
             leading: Icon(Icons.delete_forever_sharp),
             title: const Text('Delete & Reset'),
             onTap: () {
-              // Update the state of the app
-              // ...
-              // Then close the drawer
-              Navigator.pop(context);
+              Navigator.pushNamed(context, '/deletereset');
+              //Navigator.pop(context);
             },
           ),
           ListTile(
             leading: Icon(Icons.info_outline),
             title: const Text('About'),
             onTap: () {
-              // Update the state of the app
-              // ...
-              // Then close the drawer
-              Navigator.pop(context);
+              Navigator.pushNamed(context, '/about');
+              //Navigator.pop(context);
             },
           ),
         ],
