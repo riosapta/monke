@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../main.dart';
 
 class HamburgerDrawer extends StatelessWidget {
   @override
@@ -9,11 +10,10 @@ class HamburgerDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           Container(
-            height: 225.0,
+            height: 240.0,
             child: DrawerHeader(
                 decoration: BoxDecoration(
                   color: Color(0xff00A29B),
-
                 ),
                 child: Center(
                     child: Column(
@@ -25,6 +25,7 @@ class HamburgerDrawer extends StatelessWidget {
                               fontFamily: 'QuickSand',
                               fontWeight: FontWeight.bold,
                               fontSize: 45.0,
+                              color: Colors.white,
                             )
                         ),
                         Text(
@@ -32,6 +33,7 @@ class HamburgerDrawer extends StatelessWidget {
                             style: TextStyle(
                               fontFamily: 'QuickSand',
                               fontSize: 10.5,
+                              color: Colors.white,
                             )
                         ),
                         Center(
@@ -44,15 +46,19 @@ class HamburgerDrawer extends StatelessWidget {
                         ),
                         Container(
                           padding: EdgeInsets.fromLTRB(22, 5, 22, 0),
-                          child:  Text(
-                              'Sign In',
-                              style: TextStyle(
-                                fontFamily: 'QuickSand',
-                                //fontWeight: FontWeight.bold,
-                                fontSize: 13.0,
-                              )
+                          child: TextButton(
+                            onPressed: () {Navigator.pushNamed(context, '/authentication');},
+                            child: Text(
+                                'Sign In',
+                                style: TextStyle(
+                                  fontFamily: 'QuickSand',
+                                  //fontWeight: FontWeight.bold,
+                                  fontSize: 13.0,
+                                  color: Colors.white,
+                                )
                           ),
                         ),
+                        )
                       ],
                     )
                 )
@@ -74,10 +80,8 @@ class HamburgerDrawer extends StatelessWidget {
               // ),
             title: const Text('Profile'),
             onTap: () {
-              // Update the state of the app
-              // ...
-              // Then close the drawer
-              Navigator.pop(context);
+              Navigator.pushNamed(context, '/profile');
+             //Navigator.pop(context);
             },
           ),
           Divider(
