@@ -125,9 +125,6 @@ class mainPage extends StatefulWidget{
   State<StatefulWidget> createState() => _mainPageState();
 }
 
-
-
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////  MAINPAGE CLASS
 
 class _mainPageState extends State<mainPage> {
@@ -155,6 +152,9 @@ class _mainPageState extends State<mainPage> {
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
         listItems.add(Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
             margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
             child: new InkWell(
               onTap: () {print('tapped');},
@@ -224,10 +224,6 @@ class _mainPageState extends State<mainPage> {
     getPostsData();
   }
 
-
-
-
-
   /////////////////////////////////////////////////////////////////////////////////////////////////////////  MAINPAGE BUILD
   @override
   Widget build(BuildContext context) {
@@ -286,7 +282,8 @@ class _mainPageState extends State<mainPage> {
                 ]),
           ),
           Divider(
-            color: Colors.black,
+            color: Colors.grey[400],
+            height: 0,
           ),
 
           /////////////////////////////////////////////////////////////////////////  CONTENT
