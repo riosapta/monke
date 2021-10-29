@@ -290,105 +290,116 @@ class _addRecordState extends State<AddRecord>{
         ),
         centerTitle: true,
       ),
-      body: Container(
-        child: Column(
-          children: [
-           // Balance(), /////////////////////////////////////////////////////////////////////////// BALANCE IS HERE
-            Container(
-              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  customRadio2(lstTwo[0], 0),
-                  customRadio2(lstTwo[1], 1),
-                  customRadio2(lstTwo[2], 2),
-                ],
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Text('Date:'),
-                TextButton(
-                  onPressed: () => _selectDate(context),
-                  child:
-                  Text("${selectedDate.toLocal()}".split(' ')[0]),
-                ),
-                Text('Time:'),
-                TextButton(
-                  onPressed: () => _selectTime(context),
-                  child:
-                  Text(getText()),
-                ),
-              ],
-            ),
-           Container(
-             //margin: EdgeInsets.only(top: 10),
-             child: Row(
-                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                 children: [
-                   Column(
-                       children: [
-                         //Text('Category:'),
-                         TextButton(
-                           onPressed: () => setState((){
-                             categoryButtonPressed();
-                           }),
-                           child: Text('$selectedCategory'),
-                           style: ButtonStyle(
-                           ),
-                         ),
-                       ]
-                   ),
-                   Column(
-                       children: [
-                         //Text('Account:'),
-                         TextButton(
-                           onPressed: () => setState((){
-                             accountButtonPressed();
-                           }),
-                           child: Text('$selectedAccount'),
-                           style: ButtonStyle(
-                           ),
-                         ),
-                       ]
-                   ),
-                 ]
-             ),
-           ),
-            Container(
-              margin: EdgeInsets.all(10),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: 'Amount',
-                  border: OutlineInputBorder(),
-                ),
-                textAlign: TextAlign.right,
-                keyboardType: TextInputType.number,
-                  inputFormatters:<TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly,
-                    CurrencyTextInputFormatter(
-                        symbol: '$currency'
+      body: SingleChildScrollView(
+          child: Container(
+              child: Column(
+                children: [
+                  Balance(), /////////////////////////////////////////////////////////////////////////// BALANCE IS HERE
+                  Container(
+                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        customRadio2(lstTwo[0], 0),
+                        customRadio2(lstTwo[1], 1),
+                        customRadio2(lstTwo[2], 2),
+                      ],
                     ),
-                  ]
-              )
-            ),
-            // https://stackoverflow.com/questions/50395032/flutter-textfield-with-currency-format
-            // https://www.youtube.com/watch?v=eWa6iGncZ5Q
-            // https://stackoverflow.com/questions/50736571/when-i-select-a-textfield-the-keyboard-moves-over-it
-            Container(
-                margin: EdgeInsets.all(10),
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Notes',
-                    border: OutlineInputBorder(),
                   ),
-                  keyboardType: TextInputType.text,
-                  //maxLines: null,
-                )
-            ),
-          ],
-        )
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text('Date:'),
+                      TextButton(
+                        onPressed: () => _selectDate(context),
+                        child:
+                        Text("${selectedDate.toLocal()}".split(' ')[0]),
+                      ),
+                      Text('Time:'),
+                      TextButton(
+                        onPressed: () => _selectTime(context),
+                        child:
+                        Text(getText()),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    //margin: EdgeInsets.only(top: 10),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Column(
+                              children: [
+                                //Text('Category:'),
+                                TextButton(
+                                  onPressed: () => setState((){
+                                    categoryButtonPressed();
+                                  }),
+                                  child: Text('$selectedCategory'),
+                                  style: ButtonStyle(
+                                  ),
+                                ),
+                              ]
+                          ),
+                          Column(
+                              children: [
+                                //Text('Account:'),
+                                TextButton(
+                                  onPressed: () => setState((){
+                                    accountButtonPressed();
+                                  }),
+                                  child: Text('$selectedAccount'),
+                                  style: ButtonStyle(
+                                  ),
+                                ),
+                              ]
+                          ),
+                        ]
+                    ),
+                  ),
+                  Container(
+                      margin: EdgeInsets.all(10),
+                      child: TextField(
+                          decoration: InputDecoration(
+                            hintText: 'Amount',
+                            border: OutlineInputBorder(),
+                          ),
+                          textAlign: TextAlign.right,
+                          keyboardType: TextInputType.number,
+                          inputFormatters:<TextInputFormatter>[
+                            FilteringTextInputFormatter.digitsOnly,
+                            CurrencyTextInputFormatter(
+                                symbol: '$currency'
+                            ),
+                          ]
+                      )
+                  ),
+                  // https://stackoverflow.com/questions/50395032/flutter-textfield-with-currency-format
+                  // https://www.youtube.com/watch?v=eWa6iGncZ5Q
+                  // https://stackoverflow.com/questions/50736571/when-i-select-a-textfield-the-keyboard-moves-over-it
+                  Container(
+                      margin: EdgeInsets.all(10),
+                      child: TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Notes',
+                          border: OutlineInputBorder(),
+                        ),
+                        keyboardType: TextInputType.text,
+                        //maxLines: null,
+                      )
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: () {},
+                    icon: Icon(Icons.exit_to_app),
+                    label: Text('Export',
+                        style: TextStyle(
+                          fontSize: 16,
+                        )
+                    ),
+                  )
+                ],
+              )
+          )
       )
     );
   }
