@@ -28,7 +28,11 @@ class _mainCategoriesState extends State<mainCategories> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   ListTile(
-                    leading: Icon(Icons.circle),
+                    leading: CircleAvatar(
+                      radius: 15,
+                      child: Icon(Icons.money_off_csred_outlined, color: Colors.white),
+                      backgroundColor: Colors.redAccent,
+                    ),
                     title: Text(post["name"]),
                     onTap: () => (''),
                     trailing:Row(
@@ -72,7 +76,11 @@ class _mainCategoriesState extends State<mainCategories> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               ListTile(
-                leading: Icon(Icons.circle),
+                leading: CircleAvatar(
+                  radius: 15,
+                  child: Icon(Icons.attach_money_outlined, color: Colors.white),
+                  backgroundColor: Colors.greenAccent,
+                ),
                 title: Text(post["name"]),
                 onTap: () => (''),
                 trailing:Row(
@@ -126,8 +134,6 @@ class _mainCategoriesState extends State<mainCategories> {
     );
   }
 
-
-
   Widget getCategories(int idx){
     Widget child;
     if (idx == 0){
@@ -179,7 +185,18 @@ class _mainCategoriesState extends State<mainCategories> {
                 getCategories(secondaryIndex)
               ],
             ),
-        )
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () => Navigator.pushNamed(context, '/addrecord'),
+          icon: Icon(Icons.add_circle_outline, color: Colors.black),
+          label: Text('Add New Category',
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.black,
+              )),
+          backgroundColor: Colors.amber[200],
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
