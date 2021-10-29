@@ -30,12 +30,8 @@ class _mainAccountsState extends State<mainAccounts> {
                             children: <Widget>[
                               CircleAvatar(
                                 radius: 15,
-                                child: Text('AR',
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                      color: Colors.white,
-                                    )),
-                                backgroundColor: Colors.grey,
+                                child: Icon(Icons.monetization_on_outlined, color: Colors.black),
+                                backgroundColor: Colors.tealAccent,
                               ),
                               Expanded(
                                   child: Container(
