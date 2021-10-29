@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 
 /////////////// PAGES IMPORT
 import 'FilterBy.dart';
+import 'Search.dart';
 import 'MainFunctions/HamburgerDrawer.dart';
 import 'MainFunctions/Balance.dart';
 import 'Accounts/mainAccounts.dart';
@@ -19,6 +20,7 @@ import 'DrawerPages/SettingsPage.dart';
 import 'DrawerPages/Export.dart';
 import 'DrawerPages/DeleteReset.dart';
 import 'DrawerPages/About.dart';
+
 
 
 void main() async {
@@ -53,6 +55,7 @@ class MyApp extends StatelessWidget {
         '/export': (context) => Export(),
         '/deletereset': (context) => DeleteReset(),
         '/about': (context) => About(),
+        '/search': (context) => Search(),
       },
     );
   }
@@ -95,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
           actions: <Widget>[
             IconButton(
               icon: const Icon(Icons.search),
-              onPressed: () {},
+              onPressed: () {Navigator.pushNamed(context, '/search');},
             ),
           ]
       ),
