@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'FilterBy.dart';
-import 'AddRecords/AddRecord.dart';
 import 'MainFunctions/HamburgerDrawer.dart';
 import 'MainFunctions/Balance.dart';
 import 'Accounts/mainAccounts.dart';
 import 'Analysis/mainAnalysis.dart';
 import 'Categories/mainCategories.dart';
-
+import 'AddRecords/AddRecord.dart';
+import 'Authentication/mainAuthentication.dart';
+import 'Authentication/Login.dart';
+import 'Authentication/Signup.dart';
+import 'DrawerPages/Profile.dart';
 
 
 void main() async {
@@ -35,6 +38,10 @@ class MyApp extends StatelessWidget {
             ),
         '/filterby': (context) => FilterBy(),
         '/addrecord': (context) => AddRecord(),
+        '/authentication': (context) => mainAuthentication(),
+        '/authentication/login': (context) => Login(),
+        '/authentication/signup': (context) => Signup(),
+        '/profile': (context) => Profile(),
       },
     );
   }
