@@ -54,10 +54,13 @@ class _exportState extends State<Export>{
                     //crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(height:70),
-                      Icon(Icons.document_scanner_outlined, size: 120),
+                      Icon(Icons.document_scanner_outlined, color: Colors.grey, size: 120),
                       SizedBox(height:15),
-                      Text('All records between set time range can be exported as a worksheet (.csv format)',
-                      textAlign: TextAlign.center,),
+                      Text(
+                        'All records between set time range can be exported as a worksheet (.csv format)',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.grey),
+                      ),
                       SizedBox(height:35),
 
 

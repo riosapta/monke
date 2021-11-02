@@ -79,8 +79,13 @@ class _searchState extends State<Search>{
                     //mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(height: 125,),
-                      Icon(Icons.search, size: 120),
-                      Text('Search by notes, category, and account name'),
+                      Icon(Icons.search, color: Colors.grey, size: 120),
+                      Text(
+                        'Search by notes, category, and account name',
+                        style: TextStyle(
+                          color: Colors.grey,
+                        ),
+                      ),
                     ],
                   )
               )
