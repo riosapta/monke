@@ -191,47 +191,74 @@ class _mainAccountsState extends State<mainAccounts> {
                 ])
           ),
 
-          Expanded(
+          Padding(
+            padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
             child:
-              Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 30),
-                  child:
-                  Column(
-                      children: <Widget>[
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(15),
-                              topLeft: Radius.circular(15),
-                            ),
-                            color: Colors.tealAccent[400],
-                          ),
-                          width: double.maxFinite,
-                          padding: EdgeInsets.symmetric(vertical:5),
-                          //define the background color
-                          child: Center(
-                            child: Text('Accounts',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Accounts',
+                  style: TextStyle(
+                          fontSize: 14,
                         ),
-                        Expanded(
-                          child: ListView.builder(
-                            itemCount: itemsData.length,
-                            itemBuilder: (context, index) {
-                              return itemsData[index];
-                            },
-                          ),
-                        ),
-                      ])
-              ),
+                ),
+                Divider(
+                  height: 10,
+                  thickness: 0.7,
+                ),
+              ],
+            ),
           ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: itemsData.length,
+              itemBuilder: (context, index) {
+                return itemsData[index];
+              },
+            ),
+          ),
+          // Expanded(
+          //   child:
+          //     Card(
+          //         shape: RoundedRectangleBorder(
+          //           borderRadius: BorderRadius.circular(15.0),
+          //         ),
+          //         margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 30),
+          //         child:
+          //         Column(
+          //             children: <Widget>[
+          //               Container(
+          //                 decoration: BoxDecoration(
+          //                   borderRadius: BorderRadius.only(
+          //                     topRight: Radius.circular(15),
+          //                     topLeft: Radius.circular(15),
+          //                   ),
+          //                   color: Colors.tealAccent[400],
+          //                 ),
+          //                 width: double.maxFinite,
+          //                 padding: EdgeInsets.symmetric(vertical:5),
+          //                 //define the background color
+          //                 child: Center(
+          //                   child: Text('Accounts',
+          //                     style: TextStyle(
+          //                       fontSize: 12,
+          //                       fontWeight: FontWeight.bold,
+          //                     ),
+          //                   ),
+          //                 ),
+          //               ),
+          //               Expanded(
+          //                 child: ListView.builder(
+          //                   itemCount: itemsData.length,
+          //                   itemBuilder: (context, index) {
+          //                     return itemsData[index];
+          //                   },
+          //                 ),
+          //               ),
+          //             ])
+          //     ),
+          // ),
         ]
       ),
 
