@@ -10,10 +10,14 @@ import 'MainFunctions/HamburgerDrawer.dart';
 import 'MainFunctions/Balance.dart';
 import 'Accounts/mainAccounts.dart';
 import 'Accounts/addAccount.dart';
+import 'Accounts/editAccount.dart';
+import 'Accounts/detailsAccount.dart';
 import 'Analysis/mainAnalysis.dart';
 import 'Categories/mainCategories.dart';
 import 'Categories/addCategory.dart';
+import 'Categories/editCategory.dart';
 import 'AddRecords/AddRecord.dart';
+import 'AddRecords/EditRecord.dart';
 import 'Authentication/mainAuthentication.dart';
 import 'Authentication/Login.dart';
 import 'Authentication/Signup.dart';
@@ -22,6 +26,7 @@ import 'DrawerPages/SettingsPage.dart';
 import 'DrawerPages/Export.dart';
 import 'DrawerPages/DeleteReset.dart';
 import 'DrawerPages/About.dart';
+
 
 
 
@@ -51,6 +56,10 @@ class MyApp extends StatelessWidget {
         '/addrecord': (context) => AddRecord(),
         '/addaccount': (context) => AddAccount(),
         '/addcategory': (context) => AddCategory(),
+        '/editrecord': (context) => EditRecord(),
+        '/editaccount': (context) => EditAccount(),
+        '/editcategory': (context) => EditCategory(),
+        '/detailsaccount': (context) => DetailsAccount(),
         '/authentication': (context) => mainAuthentication(),
         '/authentication/login': (context) => Login(),
         '/authentication/signup': (context) => Signup(),
@@ -155,7 +164,164 @@ class mainPage extends StatefulWidget{
 class _mainPageState extends State<mainPage> {
   List<Widget> itemsData = [];
   DateTime selectedDate = DateTime.now();
+/////////////////////////////////////////////////////////////////////////////////////////////////////////// DETAILS
+  void showDetails(BuildContext context) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (context, setState) {
+                return Dialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Container(
+                    width: 500,
+                    height: 320,
+                      child:
+                      Column(
+                          children: <Widget>[
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(15),
+                                  topLeft: Radius.circular(15),
+                                ),
+                                color: Colors.tealAccent[400],
+                              ),
+                              width: double.maxFinite,
+                              //padding: EdgeInsets.all(10),
+                              //define the background color
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  IconButton(onPressed: () {Navigator.pop(context);}, icon: Icon(Icons.cancel_outlined)),
+                                  SizedBox(width: 10,),
+                                  Container(
+                                    //margin: EdgeInsets.only(left:30),
+                                    child: Text('Income',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      IconButton(onPressed: () {
+                                        Navigator.pushNamed(context, '/editrecord');
+                                      }, icon: Icon(Icons.edit)), /////////////////////////////////////////EDIT
+                                      IconButton(onPressed: () {
 
+                                      }, icon: Icon(Icons.delete)), /////////////////////////////////////DELETE
+                                    ]
+                                  )
+                                ]
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Center(
+                                    child: Container(
+                                        padding: EdgeInsets.all(10),
+                                        child: Text('Rp100,000.00',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            //fontWeight: FontWeight.bold,
+                                          ),
+                                        )
+                                    ),
+                                  ),
+                                  Divider(color: Colors.black,),
+                                  SizedBox(height:5),
+                                  Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 45),
+                                    child: Column(
+                                      children:[
+                                        Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text('Category',
+                                                  style: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontWeight: FontWeight.bold,
+                                                  )),
+                                              SizedBox(width: 20),
+                                              Text('Salary')
+                                            ]
+                                        ),
+                                        SizedBox(height:5),
+                                        Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text('Account',
+                                                  style: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontWeight: FontWeight.bold,
+                                                  )),
+                                              SizedBox(width: 20),
+                                              Text('Bank')
+                                            ]
+                                        ),
+                                        SizedBox(height:5),
+                                        Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text('Time',
+                                                  style: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontWeight: FontWeight.bold,
+                                                  )),
+                                              Text('3 Oct 2021, 11.23AM')
+                                            ]
+                                        ),
+                                      ]
+                                    )
+                                  ),
+                                  SizedBox(height:20),
+                                  Text('Note',
+                                      style: TextStyle(
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.bold,
+                                      )),
+                                  Container(
+                                    height: 100,
+                                      margin: EdgeInsets.only(top:5),
+                                      padding: EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        color: Colors.grey,
+                                      ),
+                                    child: Flex(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      direction: Axis.horizontal,
+                                      children: [
+                                        Expanded(
+                                            flex: 1,
+                                            child: Text('NADHIFAL ANJEEEEEEEEENG')
+                                        )
+                                      ],
+                                    )
+                                  )
+                                ],
+                              )
+                            ),
+                          ]
+                      )
+                  )
+                );
+              }
+          );
+        }
+    );
+  }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////// SELECTDATE
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
         context: context,
@@ -168,6 +334,7 @@ class _mainPageState extends State<mainPage> {
       });
   }
 
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////// GETPOSTDATA
   void getPostsData() {
     //List<dynamic> responseList = RECORDS_DATA;
     List<Widget> listItems = [];
@@ -182,7 +349,7 @@ class _mainPageState extends State<mainPage> {
             ),
             margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
             child: new InkWell(
-              onTap: () {print('tapped');},
+              onTap: () {showDetails(context);}, ///////////////////////////////// onTap!!!!
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Column(

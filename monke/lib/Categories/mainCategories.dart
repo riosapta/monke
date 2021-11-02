@@ -38,7 +38,7 @@ class _mainCategoriesState extends State<mainCategories> {
                     trailing:Row(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        IconButton(onPressed: (){}, icon: Icon(Icons.edit),),
+                        IconButton(onPressed: (){{Navigator.pushNamed(context, '/editcategory');}}, icon: Icon(Icons.edit),),
                         IconButton(onPressed: (){}, icon: Icon(Icons.delete),),
                       ],
                     ),
@@ -86,7 +86,7 @@ class _mainCategoriesState extends State<mainCategories> {
                 trailing:Row(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    IconButton(onPressed: (){}, icon: Icon(Icons.edit),),
+                    IconButton(onPressed: (){{Navigator.pushNamed(context, '/editaccount');}}, icon: Icon(Icons.edit),),
                     IconButton(onPressed: (){}, icon: Icon(Icons.delete),),
                   ],
                 ),

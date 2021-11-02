@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '/recordsData.dart';
+import 'detailsAccount.dart';
 
 class mainAccounts extends StatefulWidget {
   @override
@@ -18,43 +19,40 @@ class _mainAccountsState extends State<mainAccounts> {
     //     .then((QuerySnapshot querySnapshot) {
     //   querySnapshot.docs.forEach((doc) {
     responseList.forEach((post) {
-        listItems.add(new InkWell(
-                onTap: () {print('tapped');},
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5.0),
-                  child:Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        ListTile(
-                          leading: CircleAvatar(
-                            radius: 15,
-                            child: Icon(Icons.monetization_on_outlined, color: Colors.black),
-                            backgroundColor: Colors.tealAccent,
-                          ),
-                          title: Text(post["account"]),
-                          onTap: () => (''),
-                          trailing:Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Text("${post["amount"]}",
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                  )),
-                              IconButton(onPressed: (){}, icon: Icon(Icons.more_vert),),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top:5.0),
-                          child:
-                          Divider(
-                            height: 0,
-                            thickness: 0.7,
-                          ),
-                        ),
-                      ]),
-                )
-            )
+        listItems.add(Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5.0),
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                ListTile(
+                  leading: CircleAvatar(
+                    radius: 15,
+                    child: Icon(Icons.monetization_on_outlined, color: Colors.black),
+                    backgroundColor: Colors.tealAccent,
+                  ),
+                  title: Text(post["account"]),
+                  onTap: () => {Navigator.pushNamed(context, '/detailsaccount')},
+                  trailing:Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text("${post["amount"]}",
+                          style: TextStyle(
+                            fontSize: 20,
+                          )),
+                      IconButton(onPressed: (){{Navigator.pushNamed(context, '/editaccount');}}, icon: Icon(Icons.more_vert),),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top:5.0),
+                  child:
+                  Divider(
+                    height: 0,
+                    thickness: 0.7,
+                  ),
+                ),
+              ]),
+        )
         );
     });
     // }

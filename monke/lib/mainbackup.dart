@@ -1,13 +1,28 @@
-//import 'MainFunctions/RecordCard.dart';
-//import 'record.dart';
-
 import 'package:flutter/material.dart';
-import 'MainFunctions/HamburgerDrawer.dart';
-import 'FilterBy.dart';
-import 'MainFunctions/Balance.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+
+
+/////////////// PAGES IMPORT
+import 'FilterBy.dart';
+import 'Search.dart';
+import 'MainFunctions/HamburgerDrawer.dart';
+import 'MainFunctions/Balance.dart';
+import 'Accounts/mainAccounts.dart';
+import 'Accounts/addAccount.dart';
+import 'Analysis/mainAnalysis.dart';
+import 'Categories/mainCategories.dart';
+import 'Categories/addCategory.dart';
 import 'AddRecords/AddRecord.dart';
+import 'Authentication/mainAuthentication.dart';
+import 'Authentication/Login.dart';
+import 'Authentication/Signup.dart';
+import 'DrawerPages/Profile.dart';
+import 'DrawerPages/SettingsPage.dart';
+import 'DrawerPages/Export.dart';
+import 'DrawerPages/DeleteReset.dart';
+import 'DrawerPages/About.dart';
+
 
 
 void main() async {
@@ -34,6 +49,17 @@ class MyApp extends StatelessWidget {
         ),
         '/filterby': (context) => FilterBy(),
         '/addrecord': (context) => AddRecord(),
+        '/addaccount': (context) => AddAccount(),
+        '/addcategory': (context) => AddCategory(),
+        '/authentication': (context) => mainAuthentication(),
+        '/authentication/login': (context) => Login(),
+        '/authentication/signup': (context) => Signup(),
+        '/profile': (context) => Profile(),
+        '/settings': (context) => SettingsPage(),
+        '/export': (context) => Export(),
+        '/deletereset': (context) => DeleteReset(),
+        '/about': (context) => About(),
+        '/search': (context) => Search(),
       },
     );
   }
@@ -53,9 +79,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final tabs = [
     mainPage(),
-    Text('Test2'),
-    Text('Test3'),
-    Text('Test4'),
+    mainAccounts(),
+    mainAnalysis(),
+    mainCategories(),
   ];
 
   ///////////////////////////////////////////////////////////////////////////////////////////////// WIDGET BUILD MAINFRAME
@@ -76,7 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
           actions: <Widget>[
             IconButton(
               icon: const Icon(Icons.search),
-              onPressed: () {},
+              onPressed: () {Navigator.pushNamed(context, '/search');},
             ),
           ]
       ),
@@ -124,9 +150,6 @@ class mainPage extends StatefulWidget{
   State<StatefulWidget> createState() => _mainPageState();
 }
 
-
-
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////  MAINPAGE CLASS
 
 class _mainPageState extends State<mainPage> {
@@ -154,9 +177,12 @@ class _mainPageState extends State<mainPage> {
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
         listItems.add(Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
             margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
             child: new InkWell(
-                onTap: () {print('tapped');},
+                onTap: () {print('tapped' + 'Rp${doc["jumlah_trx"]}');},
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Column(
@@ -223,10 +249,6 @@ class _mainPageState extends State<mainPage> {
     getPostsData();
   }
 
-
-
-
-
   /////////////////////////////////////////////////////////////////////////////////////////////////////////  MAINPAGE BUILD
   @override
   Widget build(BuildContext context) {
@@ -285,7 +307,8 @@ class _mainPageState extends State<mainPage> {
                 ]),
           ),
           Divider(
-            color: Colors.black,
+            color: Colors.grey[400],
+            height: 0,
           ),
 
           /////////////////////////////////////////////////////////////////////////  CONTENT
@@ -304,7 +327,8 @@ class _mainPageState extends State<mainPage> {
                     },
                   );
                 },
-              )),
+              )
+          ),
         ],
       ),
 
