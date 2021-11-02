@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
+import 'listCategory.dart';
 
 class AddCategory extends StatefulWidget{
   @override
-  State<StatefulWidget> createState() => _addCategoryState();
+  State<StatefulWidget> createState() => addCategoryState();
 }
 
-class _addCategoryState extends State<AddCategory>{
-  int secondaryIndex = 0;
+class addCategoryState extends State<AddCategory>{
+  static int secondaryIndex = 0;
   List<String> lstTwo = ['Income','Expense'];
 
   String currency = 'Rp'; ///////////////////////////////////////////////////////////////////////////////// CURRENCY
@@ -21,10 +21,13 @@ class _addCategoryState extends State<AddCategory>{
   }
 
   Widget customRadio2(String txt,int index){
-    return OutlineButton(
+    return OutlinedButton(
       onPressed: () => changeSecondaryIndex(index),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-      borderSide: BorderSide(color: secondaryIndex == index ? Colors.teal : Colors.grey),
+      style: ElevatedButton.styleFrom(
+        primary: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+        side: BorderSide(color: secondaryIndex == index ? Colors.teal : Colors.grey, width: 2),
+      ),
       child: Text(txt,style: TextStyle(color: secondaryIndex == index ?Colors.teal : Colors.grey),),
     );
   }
@@ -76,6 +79,18 @@ class _addCategoryState extends State<AddCategory>{
                           keyboardType: TextInputType.text,
                           //maxLines: null,
                         )
+                    ),
+                    Container(
+                        height: MediaQuery.of(context).size.height / 3,
+                        width: MediaQuery.of(context).size.width,
+                        margin: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey, width: 2),
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(10.0)
+                          ),
+                        ),
+                          child: ListCategory(),
                     ),
                     ElevatedButton.icon(
                       onPressed: () {},

@@ -56,10 +56,13 @@ class _addRecordState extends State<AddRecord>{
   }
 
   Widget customRadio2(String txt,int index){
-    return OutlineButton(
+    return OutlinedButton(
       onPressed: () => changeSecondaryIndex(index),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-      borderSide: BorderSide(color: secondaryIndex == index ? Colors.teal : Colors.grey),
+      style: ElevatedButton.styleFrom(
+        primary: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+        side: BorderSide(color: secondaryIndex == index ? Colors.teal : Colors.grey, width: 2),
+      ),
       child: Text(txt,style: TextStyle(color: secondaryIndex == index ?Colors.teal : Colors.grey),),
     );
   }
