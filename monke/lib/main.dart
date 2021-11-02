@@ -303,7 +303,7 @@ class _mainPageState extends State<mainPage> {
                                       children: [
                                         Expanded(
                                             flex: 1,
-                                            child: Text('NADHIFAL ANJEEEEEEEEENG')
+                                            child: Text('pengen nangis')
                                         )
                                       ],
                                     )
