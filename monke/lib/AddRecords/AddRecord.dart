@@ -390,8 +390,8 @@ class _addRecordState extends State<AddRecord>{
                   ),
                   ElevatedButton.icon(
                     onPressed: () {},
-                    icon: Icon(Icons.exit_to_app),
-                    label: Text('Export',
+                    icon: Icon(Icons.add_circle_outline),
+                    label: Text('Add',
                         style: TextStyle(
                           fontSize: 16,
                         )

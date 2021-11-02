@@ -21,40 +21,36 @@ class _mainAccountsState extends State<mainAccounts> {
         listItems.add(new InkWell(
                 onTap: () {print('tapped');},
                 child: Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: Column(
+                  padding: const EdgeInsets.symmetric(vertical: 5.0),
+                  child:Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        ListTile(
+                          leading: CircleAvatar(
+                            radius: 15,
+                            child: Icon(Icons.monetization_on_outlined, color: Colors.black),
+                            backgroundColor: Colors.tealAccent,
+                          ),
+                          title: Text(post["account"]),
+                          onTap: () => (''),
+                          trailing:Row(
+                            mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
-                              CircleAvatar(
-                                radius: 15,
-                                child: Icon(Icons.monetization_on_outlined, color: Colors.black),
-                                backgroundColor: Colors.tealAccent,
-                              ),
-                              Expanded(
-                                  child: Container(
-                                      padding: EdgeInsets.all(10),
-                                      child:
-                                        Text(post["account"],
-                                            style: TextStyle(
-                                              fontSize: 13,
-                                            )),
-                                        )),
                               Text("${post["amount"]}",
                                   style: TextStyle(
                                     fontSize: 20,
                                   )),
-                              Icon(Icons.more_vert)
-                            ]),
+                              IconButton(onPressed: (){}, icon: Icon(Icons.more_vert),),
+                            ],
+                          ),
+                        ),
                         Padding(
-                            padding: const EdgeInsets.only(top:5.0),
-                            child:
-                              Divider(
-                                height: 0,
-                                thickness: 0.7,
-                              ),
+                          padding: const EdgeInsets.only(top:5.0),
+                          child:
+                          Divider(
+                            height: 0,
+                            thickness: 0.7,
+                          ),
                         ),
                       ]),
                 )
@@ -242,7 +238,7 @@ class _mainAccountsState extends State<mainAccounts> {
       ),
 
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => Navigator.pushNamed(context, '/addrecord'),
+        onPressed: () => Navigator.pushNamed(context, '/addaccount'),
         icon: Icon(Icons.add_circle_outline, color: Colors.black),
         label: Text('Add New Account',
         style: TextStyle(

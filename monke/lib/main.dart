@@ -9,8 +9,10 @@ import 'Search.dart';
 import 'MainFunctions/HamburgerDrawer.dart';
 import 'MainFunctions/Balance.dart';
 import 'Accounts/mainAccounts.dart';
+import 'Accounts/addAccount.dart';
 import 'Analysis/mainAnalysis.dart';
 import 'Categories/mainCategories.dart';
+import 'Categories/addCategory.dart';
 import 'AddRecords/AddRecord.dart';
 import 'Authentication/mainAuthentication.dart';
 import 'Authentication/Login.dart';
@@ -47,6 +49,8 @@ class MyApp extends StatelessWidget {
             ),
         '/filterby': (context) => FilterBy(),
         '/addrecord': (context) => AddRecord(),
+        '/addaccount': (context) => AddAccount(),
+        '/addcategory': (context) => AddCategory(),
         '/authentication': (context) => mainAuthentication(),
         '/authentication/login': (context) => Login(),
         '/authentication/signup': (context) => Signup(),
