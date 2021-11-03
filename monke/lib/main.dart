@@ -67,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ///////////////////////////////////////////////////////////////////////// AppBar
       drawer: HamburgerDrawer(),
       appBar: AppBar(
-          title: Text(widget.data,
+          title: Text('MONKE', //widget.data,
               style: TextStyle(
                 fontFamily: 'Quicksand',
                 fontWeight: FontWeight.bold,
