@@ -19,7 +19,7 @@ class _FilterByState extends State<FilterBy>{
   //typeOpt = 0 all, 1 expense, 2 income, 3 transfer
   int typeOpt = 0;
 
-  List<String> lst = ['Daily','Weekly','Monthly'];
+  List<String> lst = ['Daily','Monthly'];
   List<String> lstTwo = ['Income','Expense','Transfer'];
   int secondaryIndex = 0;
 
@@ -300,7 +300,6 @@ class _FilterByState extends State<FilterBy>{
                     children: <Widget>[
                       customRadio2(lst[0], 0),
                       customRadio2(lst[1], 1),
-                      customRadio2(lst[2], 2),
                     ],
                   ),
                   Container(padding: EdgeInsets.fromLTRB(0, 35, 0, 0),
@@ -311,43 +310,6 @@ class _FilterByState extends State<FilterBy>{
                               ),),
                             Divider(
                               color: Colors.black,
-                            ),
-                            Text(
-                              'By Time',
-                              style: TextStyle(
-                                color: Colors.grey,
-                              ),
-                            ),
-                            Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .spaceAround,
-                                children: [
-                                  Text(
-                                    'From:',
-                                    style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                  TextButton(
-                                    onPressed: () => _selectDateRange(context),
-                                    child: Text(
-                                        "${dateRange.start.toLocal()}".split(
-                                            ' ')[0]),
-                                  ),
-                                  Text(
-                                    'to:',
-                                    style: TextStyle(
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                  TextButton(
-                                    onPressed: () => _selectDateRange(context),
-                                    child: Text(
-                                        "${dateRange.end.toLocal()}".split(
-                                            ' ')[0]),
-                                  ),
-                                ]
                             ),
                             Text(
                               'By Category',
@@ -426,9 +388,10 @@ class _FilterByState extends State<FilterBy>{
                                     onPressed: () {
                                       print(Text('Display Opt: $displayOpt'));
                                       print(Text('Type Opt: $typeOpt'));
-                                      Navigator.pushReplacementNamed(context, '/', arguments: {
-                                        // put shit to pass here.
-                                      });
+                                      Navigator.of(context).pushNamed(
+                                        '/passDataToHome',
+                                        arguments: 'Hello there from the first page!',
+                                      );
                                     },
                                     icon: Icon(Icons.filter_list_alt),
                                     label: Text('Confirm Filter',

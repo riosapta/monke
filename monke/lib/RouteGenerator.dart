@@ -24,7 +24,16 @@ class RouteGenerator {
     final args = settings.arguments;
     switch(settings.name){
       case '/':
-        return MaterialPageRoute(builder: (_) => MyHomePage(title: 'MonkeGIGA'));
+        return MaterialPageRoute(builder: (_) => MyHomePage(title: 'MonkeGIGA', data: '',));
+      case '/passDataToHome':
+        if (args is String) {
+          return MaterialPageRoute(
+            builder: (_) => MyHomePage(
+              title: 'MonkeGIGA',
+              data: args,
+            ),
+          );
+        } return _errorRoute();
       case '/filterby':
         return MaterialPageRoute(builder: (_) => FilterBy());
       case '/addrecord':
@@ -59,8 +68,10 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => About());
       case '/search':
         return MaterialPageRoute(builder: (_) => Search());
+///////////////////////////////////////////////////////////////////////////////////////////
+      case '/mainRecords':
+        return MaterialPageRoute(builder: (_) => mainPage(''));
       default:
-      // If there is no such named route in the switch statement, e.g. /third
         return _errorRoute();
     };
   }

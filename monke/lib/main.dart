@@ -18,6 +18,7 @@ void main() async {
 
 /////////////////////////////////////////////////////////////////////////  Wrapper Classes
 class MyApp extends StatelessWidget {
+
   const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
@@ -35,7 +36,10 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+
+  final String data;
+
+  const MyHomePage({Key? key, required this.title, required this.data}) : super(key: key);
 
   final String title;
 
@@ -47,11 +51,13 @@ class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
 
   final tabs = [
-    mainPage(),
+    mainPage(''),
     mainAccounts(),
     mainAnalysis(),
     mainCategories(),
   ];
+
+
 
   ///////////////////////////////////////////////////////////////////////////////////////////////// WIDGET BUILD MAINFRAME
   @override
@@ -61,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ///////////////////////////////////////////////////////////////////////// AppBar
       drawer: HamburgerDrawer(),
       appBar: AppBar(
-          title: Text("MONKE",
+          title: Text(widget.data,
               style: TextStyle(
                 fontFamily: 'Quicksand',
                 fontWeight: FontWeight.bold,
@@ -115,6 +121,10 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class mainPage extends StatefulWidget{
+
+  final arguments;
+  const mainPage(this.arguments);
+
   @override
   State<StatefulWidget> createState() => _mainPageState();
 }
@@ -353,66 +363,6 @@ class _mainPageState extends State<mainPage> {
                 ),
               ]),
         )
-
-        //     Card(
-        //     shape: RoundedRectangleBorder(
-        //       borderRadius: BorderRadius.circular(15.0),
-        //     ),
-        //     margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
-        //     child: new InkWell(
-        //       onTap: () {showDetails(context);}, ///////////////////////////////// onTap!!!!
-        //       child: Padding(
-        //         padding: const EdgeInsets.all(10.0),
-        //         child: Column(
-        //             crossAxisAlignment: CrossAxisAlignment.stretch,
-        //             children: <Widget>[
-        //               Text(
-        //                 "${doc["tanggal_trx"].toDate()}".split(' ')[0],
-        //                 style: TextStyle(
-        //                   fontSize: 12,
-        //                 ),
-        //               ),
-        //               SizedBox(height: 6.0),
-        //               Divider(
-        //                 color: Colors.black,
-        //               ),
-        //               Row(
-        //                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-        //                   children: <Widget>[
-        //                     CircleAvatar(
-        //                       radius: 15,
-        //                       child: Text('AR',
-        //                           style: TextStyle(
-        //                             fontSize: 10,
-        //                             color: Colors.white,
-        //                           )),
-        //                       backgroundColor: Colors.grey,
-        //                     ),
-        //                     Expanded(
-        //                         child: Container(
-        //                             padding: EdgeInsets.all(10),
-        //                             child: Column(
-        //                                 crossAxisAlignment:
-        //                                 CrossAxisAlignment.start,
-        //                                 children: <Widget>[
-        //                                   Text(doc["jenis_trx"],
-        //                                       style: TextStyle(
-        //                                         fontSize: 13,
-        //                                       )),
-        //                                   Text(doc["akun_trx"],
-        //                                       style: TextStyle(
-        //                                         fontSize: 10,
-        //                                       )),
-        //                                 ]))),
-        //                     Text('Rp${doc["jumlah_trx"]}',
-        //                         style: TextStyle(
-        //                           fontSize: 20,
-        //                         )),
-        //                   ])
-        //             ]),
-        //       )
-        //     )
-        // )
         );
       });
     });
@@ -426,6 +376,7 @@ class _mainPageState extends State<mainPage> {
     super.initState();
     getPostsData();
   }
+
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////  MAINPAGE BUILD
   @override
@@ -524,4 +475,11 @@ class _mainPageState extends State<mainPage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
+}
+
+class ScreenArguments {
+  final String title;
+  final String message;
+
+  ScreenArguments(this.title, this.message);
 }
