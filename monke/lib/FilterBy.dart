@@ -21,7 +21,10 @@ class _FilterByState extends State<FilterBy>{
 
   List<String> lst = ['Daily','Monthly'];
   List<String> lstTwo = ['Income','Expense','Transfer'];
-  int secondaryIndex = 0;
+  List<bool> typeIndex = [true, true, true];
+  int disOptIndex = 0;
+
+
 
   void _reset() {
     Navigator.pushReplacement(
@@ -255,17 +258,43 @@ class _FilterByState extends State<FilterBy>{
     });
   }
 
-  void changeSecondaryIndex(int index){
+  void changeDisOptIndex(int index){
     setState(() {
-      secondaryIndex = index;
+      disOptIndex = index;
     });
   }
+
+  Widget customRadio(String txt,int index){
+    return OutlinedButton(
+      onPressed: () => changeDisOptIndex(index),
+      style: ElevatedButton.styleFrom(
+        primary: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        side: BorderSide(color: disOptIndex == index ? Colors.teal : Colors.grey),
+      ),
+      child: Text(txt,style: TextStyle(color: disOptIndex == index ?Colors.teal : Colors.grey),),
+    );
+  }
+
+  void changeTypeOptIndex(int index){
+    setState(() {
+      if(typeIndex[index] == true){
+        typeIndex[index] = false;
+      }else{
+        typeIndex[index] = true;
+      }
+    });
+  }
+
   Widget customRadio2(String txt,int index){
-    return OutlineButton(
-      onPressed: () => changeSecondaryIndex(index),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-      borderSide: BorderSide(color: secondaryIndex == index ? Colors.teal : Colors.grey),
-      child: Text(txt,style: TextStyle(color: secondaryIndex == index ?Colors.teal : Colors.grey),),
+    return OutlinedButton(
+      onPressed: () => changeTypeOptIndex(index),
+      style: ElevatedButton.styleFrom(
+        primary: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        side: BorderSide(color: typeIndex[index] == true ? Colors.teal : Colors.grey),
+      ),
+      child: Text(txt,style: TextStyle(color: typeIndex[index] == true ?Colors.teal : Colors.grey),),
     );
   }
 
@@ -298,8 +327,8 @@ class _FilterByState extends State<FilterBy>{
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      customRadio2(lst[0], 0),
-                      customRadio2(lst[1], 1),
+                      customRadio(lst[0], 0),
+                      customRadio(lst[1], 1),
                     ],
                   ),
                   Container(padding: EdgeInsets.fromLTRB(0, 35, 0, 0),
@@ -310,6 +339,20 @@ class _FilterByState extends State<FilterBy>{
                               ),),
                             Divider(
                               color: Colors.black,
+                            ),
+                            Text(
+                              'By Type',
+                              style: TextStyle(
+                                color: Colors.grey,
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                customRadio2(lstTwo[0], 0),
+                                customRadio2(lstTwo[1], 1),
+                                customRadio2(lstTwo[2], 2),
+                              ],
                             ),
                             Text(
                               'By Category',
@@ -324,35 +367,6 @@ class _FilterByState extends State<FilterBy>{
                               child: Text('$selectedCategory'),
                               style: ButtonStyle(
                               ),
-                            ),
-                            Text(
-                              'By Type',
-                              style: TextStyle(
-                                color: Colors.grey,
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                TextButton(
-                                  onPressed: () {},
-                                  child: Text('Expense'),
-                                  style: ButtonStyle(
-                                  ),
-                                ),
-                                TextButton(
-                                  onPressed: () {},
-                                  child: Text('Income'),
-                                  style: ButtonStyle(
-                                  ),
-                                ),
-                                TextButton(
-                                  onPressed: () {},
-                                  child: Text('Transfer'),
-                                  style: ButtonStyle(
-                                  ),
-                                ),
-                              ],
                             ),
                             Text(
                               'By Account',
