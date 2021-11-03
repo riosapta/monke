@@ -343,65 +343,116 @@ class _mainPageState extends State<mainPage> {
         .get()
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
-        listItems.add(Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.0),
-            ),
-            margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
-            child: new InkWell(
-              onTap: () {showDetails(context);}, ///////////////////////////////// onTap!!!!
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      Text(
-                        "${doc["tanggal_trx"].toDate()}".split(' ')[0],
-                        style: TextStyle(
-                          fontSize: 12,
+        listItems.add(Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5.0),
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                ListTile(
+                  leading: CircleAvatar(
+                    radius: 20,
+                    child: Icon(doc["akun_trx"] == "BRI" ? Icons.money_off_csred_outlined : Icons.attach_money_outlined, color: Colors.white),
+                    backgroundColor: doc["akun_trx"] == "BRI" ? Colors.redAccent : Colors.greenAccent,
+                  ),
+                  title: Text(doc["jenis_trx"],
+                      style: TextStyle(
+                        fontSize: 13,
+                      )),
+                  subtitle:
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(doc["akun_trx"],
+                            style: TextStyle(
+                              fontSize: 12,
+                            )),
+                        Text(
+                          "${doc["tanggal_trx"].toDate()}".split(' ')[0],
+                          style: TextStyle(
+                            fontSize: 10,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 6.0),
-                      Divider(
-                        color: Colors.black,
-                      ),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            CircleAvatar(
-                              radius: 15,
-                              child: Text('AR',
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    color: Colors.white,
-                                  )),
-                              backgroundColor: Colors.grey,
-                            ),
-                            Expanded(
-                                child: Container(
-                                    padding: EdgeInsets.all(10),
-                                    child: Column(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          Text(doc["jenis_trx"],
-                                              style: TextStyle(
-                                                fontSize: 13,
-                                              )),
-                                          Text(doc["akun_trx"],
-                                              style: TextStyle(
-                                                fontSize: 10,
-                                              )),
-                                        ]))),
-                            Text('Rp${doc["jumlah_trx"]}',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                )),
-                          ])
-                    ]),
-              )
-            )
+                      ],
+                    ),
+                  dense: true,
+                  onTap: () => (''),
+                  trailing:Text('Rp${doc["jumlah_trx"]}',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: doc["akun_trx"] == "BRI" ? Colors.redAccent : Colors.greenAccent[400],
+                      )),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top:10.0),
+                  child:
+                  Divider(
+                    // color: doc["akun_trx"] == "BRI" ? Colors.redAccent : Colors.greenAccent,
+                    height: 0,
+                    thickness: 0.7,
+                  ),
+                ),
+              ]),
         )
+
+        //     Card(
+        //     shape: RoundedRectangleBorder(
+        //       borderRadius: BorderRadius.circular(15.0),
+        //     ),
+        //     margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
+        //     child: new InkWell(
+        //       onTap: () {showDetails(context);}, ///////////////////////////////// onTap!!!!
+        //       child: Padding(
+        //         padding: const EdgeInsets.all(10.0),
+        //         child: Column(
+        //             crossAxisAlignment: CrossAxisAlignment.stretch,
+        //             children: <Widget>[
+        //               Text(
+        //                 "${doc["tanggal_trx"].toDate()}".split(' ')[0],
+        //                 style: TextStyle(
+        //                   fontSize: 12,
+        //                 ),
+        //               ),
+        //               SizedBox(height: 6.0),
+        //               Divider(
+        //                 color: Colors.black,
+        //               ),
+        //               Row(
+        //                   mainAxisAlignment: MainAxisAlignment.spaceAround,
+        //                   children: <Widget>[
+        //                     CircleAvatar(
+        //                       radius: 15,
+        //                       child: Text('AR',
+        //                           style: TextStyle(
+        //                             fontSize: 10,
+        //                             color: Colors.white,
+        //                           )),
+        //                       backgroundColor: Colors.grey,
+        //                     ),
+        //                     Expanded(
+        //                         child: Container(
+        //                             padding: EdgeInsets.all(10),
+        //                             child: Column(
+        //                                 crossAxisAlignment:
+        //                                 CrossAxisAlignment.start,
+        //                                 children: <Widget>[
+        //                                   Text(doc["jenis_trx"],
+        //                                       style: TextStyle(
+        //                                         fontSize: 13,
+        //                                       )),
+        //                                   Text(doc["akun_trx"],
+        //                                       style: TextStyle(
+        //                                         fontSize: 10,
+        //                                       )),
+        //                                 ]))),
+        //                     Text('Rp${doc["jumlah_trx"]}',
+        //                         style: TextStyle(
+        //                           fontSize: 20,
+        //                         )),
+        //                   ])
+        //             ]),
+        //       )
+        //     )
+        // )
         );
       });
     });
@@ -485,7 +536,7 @@ class _mainPageState extends State<mainPage> {
                     .collection('transactions')
                     .snapshots(),
                 builder: (context, snapshot) {
-                  if (!snapshot.hasData) return const Text('Loading...');
+                  // if (!snapshot.hasData) return const Text('Loading...');
                   return ListView.builder(
                     itemCount: itemsData.length,
                     physics: BouncingScrollPhysics(),

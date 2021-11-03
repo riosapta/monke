@@ -10,6 +10,20 @@ class mainAccounts extends StatefulWidget {
 class _mainAccountsState extends State<mainAccounts> {
   List<Widget> itemsData = [];
 
+  void onSelected(BuildContext context, int item) {
+    switch (item) {
+      case 0:
+        Navigator.pushNamed(context, '/detailsaccount');
+        break;
+      case 1:
+        Navigator.pushNamed(context, '/editaccount');
+        break;
+      case 2:
+        print('Delete function insert here');
+        break;
+    }
+  }
+
   void getPostsData() {
     List<dynamic> responseList = RECORDS_DATA;
     List<Widget> listItems = [];
@@ -39,7 +53,21 @@ class _mainAccountsState extends State<mainAccounts> {
                           style: TextStyle(
                             fontSize: 20,
                           )),
-                      IconButton(onPressed: (){{Navigator.pushNamed(context, '/editaccount');}}, icon: Icon(Icons.more_vert),),
+                      PopupMenuButton<int>(
+                        onSelected: (item) => onSelected(context, item),
+                        itemBuilder: (context) => [
+                          PopupMenuItem<int>(
+                              value: 0,
+                              child: Text('Details')),
+                          PopupMenuItem<int>(
+                              value: 1,
+                              child: Text('Edit')),
+                          PopupMenuItem<int>(
+                              value: 2,
+                              child: Text('Delete')),
+                        ],
+                      ),
+                      // IconButton(onPressed: (){{Navigator.pushNamed(context, '/editaccount');}}, icon: Icon(Icons.more_vert),),
                     ],
                   ),
                 ),
