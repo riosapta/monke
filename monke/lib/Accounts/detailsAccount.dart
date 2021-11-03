@@ -46,7 +46,79 @@ class _detailsAccountState extends State<DetailsAccount>{
                   ],
                 )
               ]
-            )
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
+              child:
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Overall',
+                    style: TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
+                  Divider(
+                    height: 10,
+                    thickness: 0.7,
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          Expanded(
+                              child: Container(
+                                padding: EdgeInsets.fromLTRB(0, 5.0, 5.0, 5.0),
+                                child: Text('Total Income',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                    )
+                                ),
+                              )
+                          ),
+                          Text('RpXXX.XXX,XX',
+                              style: TextStyle(
+                                fontSize: 17,
+                              )),
+                        ]
+                    ),
+                    Divider(
+                      color: Colors.green[400],
+                      thickness: 0.7,
+                    ),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          Expanded(
+                              child: Container(
+                                padding: EdgeInsets.fromLTRB(0, 5.0, 5.0, 5.0),
+                                child: Text('Total Expense',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                    )
+                                ),
+                              )
+                          ),
+                          Text('RpXXX.XXX,XX',
+                              style: TextStyle(
+                                fontSize: 17,
+                              )),
+                        ]
+                    ),
+                    Divider(
+                      color: Colors.redAccent[100],
+                      thickness: 0.7,
+                    ),
+                  ]),
+            ),
           ],
         )
       )

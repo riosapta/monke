@@ -12,6 +12,17 @@ class _profileState extends State<Profile>{
   String gender = 'Gender';
   DateTime birthday = DateTime.now();
 
+  void onSelected(BuildContext context, int item) {
+    switch (item) {
+      case 0:
+        print('Insert Sign out Here');
+        break;
+      case 1:
+        print('Insert Edit Here');
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,9 +35,18 @@ class _profileState extends State<Profile>{
               )),
           centerTitle: true,
           actions: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.menu),
-              onPressed: () {},
+            PopupMenuButton<int>(
+              onSelected: (item) => onSelected(context, item),
+              itemBuilder: (context) => [
+                PopupMenuItem<int>(
+                  value: 0,
+                  child: Text('Sign out'),
+                ),
+                PopupMenuItem<int>(
+                  value: 1,
+                  child: Text('Edit'),
+                ),
+              ],
             ),
           ]
       ),
