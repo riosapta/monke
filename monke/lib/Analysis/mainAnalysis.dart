@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '/MainFunctions/Balance.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'pieChart.dart';
 
 class mainAnalysis extends StatefulWidget {
   @override
@@ -10,7 +11,6 @@ class _mainAnalysisState extends State<mainAnalysis> {
   DateTime selectedDate = DateTime.now();
   int secondaryIndex = 0;
   List<String> lst = ['Expense Overview','Income Overview', 'Expense Flow','Income Flow'];
-
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -53,9 +53,6 @@ class _mainAnalysisState extends State<mainAnalysis> {
         body:
         Column(
             children: <Widget>[
-            ///////////////////////////////////////////////////////////////////////// BALANCE
-            Balance(),
-      // balance gw pindahin keluar, biar bisa dipake banyak page.
 
       ///////////////////////////////////////////////////////////////////////// DATE AND TIME
         Container(
@@ -120,6 +117,11 @@ class _mainAnalysisState extends State<mainAnalysis> {
               ],
             ),
           ),
+        Column(
+          children: [
+            PieChartSample2(),
+          ],
+        ),
       ])
     );
   }
