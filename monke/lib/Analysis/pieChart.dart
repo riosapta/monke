@@ -16,7 +16,7 @@ class PieChart2State extends State {
   Widget build(BuildContext context) {
     return
               AspectRatio(
-                aspectRatio: 1,
+                aspectRatio: 2,
                 child: PieChart(
                   PieChartData(
                       pieTouchData: PieTouchData(touchCallback:

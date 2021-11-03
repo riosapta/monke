@@ -118,8 +118,10 @@ class _mainAnalysisState extends State<mainAnalysis> {
             ),
           ),
         Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             PieChartSample2(),
+            Text('pengennangis'),
           ],
         ),
       ])
