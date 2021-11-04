@@ -453,6 +453,35 @@ class _addRecordState extends State<AddRecord> {
           .catchError((error) => print("Failed to add trx: $error"));
     }
 
+    void alertDialogCategory(BuildContext context) {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return StatefulBuilder(builder: (context, setState) {
+              return AlertDialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                content: Text('You have to select category or account!',
+                    style: TextStyle(
+                      color: Colors.red,
+                    )),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'OK'),
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            }
+            );
+          }
+      );
+    }
+
+    final _formKey = GlobalKey<FormState>();
+
     return Scaffold(
         appBar: AppBar(
           title: Text("Add New Record",
@@ -495,37 +524,62 @@ class _addRecordState extends State<AddRecord> {
               ],
             ),
             transferOpt(secondaryIndex),
-            Container(
-                margin: EdgeInsets.all(10),
-                child: TextField(
-                    controller: amountController,
-                    decoration: InputDecoration(
-                      hintText: 'Amount',
-                      border: OutlineInputBorder(),
-                    ),
-                    textAlign: TextAlign.right,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly,
-                      CurrencyTextInputFormatter(symbol: '$currency'),
-                    ])),
-            // https://stackoverflow.com/questions/50395032/flutter-textfield-with-currency-format
-            // https://www.youtube.com/watch?v=eWa6iGncZ5Q
-            // https://stackoverflow.com/questions/50736571/when-i-select-a-textfield-the-keyboard-moves-over-it
-            Container(
-                margin: EdgeInsets.all(10),
-                child: TextField(
-                  controller: noteController,
-                  decoration: InputDecoration(
-                    hintText: 'Notes',
-                    border: OutlineInputBorder(),
-                  ),
-                  keyboardType: TextInputType.text,
-                  //maxLines: null,
-                )),
+            Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  Container(
+                      margin: EdgeInsets.all(10),
+                      child: TextFormField(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter record amount';
+                            }
+                            return null;
+                          },
+                          controller: amountController,
+                          decoration: InputDecoration(
+                            hintText: 'Amount',
+                            border: OutlineInputBorder(),
+                          ),
+                          textAlign: TextAlign.right,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.digitsOnly,
+                            CurrencyTextInputFormatter(symbol: '$currency', decimalDigits: 0,),
+                          ])),
+                  // https://stackoverflow.com/questions/50395032/flutter-textfield-with-currency-format
+                  // https://www.youtube.com/watch?v=eWa6iGncZ5Q
+                  // https://stackoverflow.com/questions/50736571/when-i-select-a-textfield-the-keyboard-moves-over-it
+                  Container(
+                      margin: EdgeInsets.all(10),
+                      child: TextFormField(
+                        controller: noteController,
+                        decoration: InputDecoration(
+                          hintText: 'Notes',
+                          border: OutlineInputBorder(),
+                        ),
+                        keyboardType: TextInputType.text,
+                        //maxLines: null,
+                      )),
+                ]
+              )
+            ),
             ElevatedButton.icon(
               onPressed: () {
-                Navigator.pop(context);
+                if (_formKey.currentState!.validate()) {
+                  // If the form is valid, display a snackbar. In the real world,
+                  // you'd often call a server or save the information in a database.
+                  if(selectedCategory == 'Select Category' || selectedCategory == 'Select Account'){
+                    alertDialogCategory(context);
+                  } else {
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Processing Data')),
+                    );
+                  }
+                }
+
                 /*addTrx(
                     int.parse(amountController.text
                         .replaceAll('Rp', '')
