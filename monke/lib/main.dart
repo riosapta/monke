@@ -81,8 +81,12 @@ class _MyHomePageState extends State<MyHomePage> {
           ]),
 
 /////////////////////////////////////////////////////////////////////////  Body
-      body: tabs[_selectedIndex],
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: tabs,
+      ),
 
+          //  tabs[_selectedIndex],
       /////////////////////////////////////////////////////////////////////////  BOTTOM NAVIGATION BAR
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -519,14 +523,17 @@ class _mainPageState extends State<mainPage> {
                 .collection('transactions')
                 .snapshots(),
             builder: (context, snapshot) {
-              // if (!snapshot.hasData) return const Text('Loading...');
-              return ListView.builder(
-                itemCount: itemsData.length,
-                physics: BouncingScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return itemsData[index];
-                },
-              );
+              if (!snapshot.hasData) {
+                return const Text('Loading...');
+              } else if (snapshot.hasData){
+                return ListView.builder(
+                  itemCount: itemsData.length,
+                  physics: BouncingScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return itemsData[index];
+                  },
+                );
+              } else return const Text ('Error');
             },
           )),
         ],
