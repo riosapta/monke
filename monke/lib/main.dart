@@ -18,7 +18,6 @@ void main() async {
 
 /////////////////////////////////////////////////////////////////////////  Wrapper Classes
 class MyApp extends StatelessWidget {
-
   const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
@@ -36,10 +35,10 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-
   final String data;
 
-  const MyHomePage({Key? key, required this.title, required this.data}) : super(key: key);
+  const MyHomePage({Key? key, required this.title, required this.data})
+      : super(key: key);
 
   final String title;
 
@@ -56,8 +55,6 @@ class _MyHomePageState extends State<MyHomePage> {
     mainAnalysis(),
     mainCategories(),
   ];
-
-
 
   ///////////////////////////////////////////////////////////////////////////////////////////////// WIDGET BUILD MAINFRAME
   @override
@@ -77,10 +74,11 @@ class _MyHomePageState extends State<MyHomePage> {
           actions: <Widget>[
             IconButton(
               icon: const Icon(Icons.search),
-              onPressed: () {Navigator.pushNamed(context, '/search');},
+              onPressed: () {
+                Navigator.pushNamed(context, '/search');
+              },
             ),
-          ]
-      ),
+          ]),
 
 /////////////////////////////////////////////////////////////////////////  Body
       body: tabs[_selectedIndex],
@@ -120,8 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class mainPage extends StatefulWidget{
-
+class mainPage extends StatefulWidget {
   final arguments;
   const mainPage(this.arguments);
 
@@ -140,155 +137,152 @@ class _mainPageState extends State<mainPage> {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return StatefulBuilder(
-              builder: (context, setState) {
-                return Dialog(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Container(
+          return StatefulBuilder(builder: (context, setState) {
+            return Dialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Container(
                     width: 500,
                     height: 320,
-                      child:
-                      Column(
-                          children: <Widget>[
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(15),
-                                  topLeft: Radius.circular(15),
+                    child: Column(children: <Widget>[
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(15),
+                            topLeft: Radius.circular(15),
+                          ),
+                          color: Colors.tealAccent[400],
+                        ),
+                        width: double.maxFinite,
+                        //padding: EdgeInsets.all(10),
+                        //define the background color
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              IconButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  icon: Icon(Icons.cancel_outlined)),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Container(
+                                //margin: EdgeInsets.only(left:30),
+                                child: Text(
+                                  'Income',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                                color: Colors.tealAccent[400],
                               ),
-                              width: double.maxFinite,
-                              //padding: EdgeInsets.all(10),
-                              //define the background color
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  IconButton(onPressed: () {Navigator.pop(context);}, icon: Icon(Icons.cancel_outlined)),
-                                  SizedBox(width: 10,),
-                                  Container(
-                                    //margin: EdgeInsets.only(left:30),
-                                    child: Text('Income',
+                              Row(children: [
+                                IconButton(
+                                    onPressed: () {
+                                      Navigator.pushNamed(
+                                          context, '/editrecord');
+                                    },
+                                    icon: Icon(Icons
+                                        .edit)), /////////////////////////////////////////EDIT
+                                IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(Icons
+                                        .delete)), /////////////////////////////////////DELETE
+                              ])
+                            ]),
+                      ),
+                      Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Center(
+                                child: Container(
+                                    padding: EdgeInsets.all(10),
+                                    child: Text(
+                                      'Rp100,000.00',
                                       style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                        //fontWeight: FontWeight.bold,
                                       ),
-                                    ),
+                                    )),
+                              ),
+                              Divider(
+                                color: Colors.black,
+                              ),
+                              SizedBox(height: 5),
+                              Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 45),
+                                  child: Column(children: [
+                                    Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('Category',
+                                              style: TextStyle(
+                                                color: Colors.grey,
+                                                fontWeight: FontWeight.bold,
+                                              )),
+                                          SizedBox(width: 20),
+                                          Text('Salary')
+                                        ]),
+                                    SizedBox(height: 5),
+                                    Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('Account',
+                                              style: TextStyle(
+                                                color: Colors.grey,
+                                                fontWeight: FontWeight.bold,
+                                              )),
+                                          SizedBox(width: 20),
+                                          Text('Bank')
+                                        ]),
+                                    SizedBox(height: 5),
+                                    Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('Time',
+                                              style: TextStyle(
+                                                color: Colors.grey,
+                                                fontWeight: FontWeight.bold,
+                                              )),
+                                          Text('3 Oct 2021, 11.23AM')
+                                        ]),
+                                  ])),
+                              SizedBox(height: 20),
+                              Text('Note',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                              Container(
+                                  height: 100,
+                                  margin: EdgeInsets.only(top: 5),
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: Colors.grey,
                                   ),
-                                  Row(
+                                  child: Flex(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    direction: Axis.horizontal,
                                     children: [
-                                      IconButton(onPressed: () {
-                                        Navigator.pushNamed(context, '/editrecord');
-                                      }, icon: Icon(Icons.edit)), /////////////////////////////////////////EDIT
-                                      IconButton(onPressed: () {
-
-                                      }, icon: Icon(Icons.delete)), /////////////////////////////////////DELETE
-                                    ]
-                                  )
-                                ]
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Center(
-                                    child: Container(
-                                        padding: EdgeInsets.all(10),
-                                        child: Text('Rp100,000.00',
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            //fontWeight: FontWeight.bold,
-                                          ),
-                                        )
-                                    ),
-                                  ),
-                                  Divider(color: Colors.black,),
-                                  SizedBox(height:5),
-                                  Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 45),
-                                    child: Column(
-                                      children:[
-                                        Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text('Category',
-                                                  style: TextStyle(
-                                                    color: Colors.grey,
-                                                    fontWeight: FontWeight.bold,
-                                                  )),
-                                              SizedBox(width: 20),
-                                              Text('Salary')
-                                            ]
-                                        ),
-                                        SizedBox(height:5),
-                                        Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text('Account',
-                                                  style: TextStyle(
-                                                    color: Colors.grey,
-                                                    fontWeight: FontWeight.bold,
-                                                  )),
-                                              SizedBox(width: 20),
-                                              Text('Bank')
-                                            ]
-                                        ),
-                                        SizedBox(height:5),
-                                        Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text('Time',
-                                                  style: TextStyle(
-                                                    color: Colors.grey,
-                                                    fontWeight: FontWeight.bold,
-                                                  )),
-                                              Text('3 Oct 2021, 11.23AM')
-                                            ]
-                                        ),
-                                      ]
-                                    )
-                                  ),
-                                  SizedBox(height:20),
-                                  Text('Note',
-                                      style: TextStyle(
-                                        color: Colors.grey,
-                                        fontWeight: FontWeight.bold,
-                                      )),
-                                  Container(
-                                    height: 100,
-                                      margin: EdgeInsets.only(top:5),
-                                      padding: EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(12),
-                                        color: Colors.grey,
-                                      ),
-                                    child: Flex(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      direction: Axis.horizontal,
-                                      children: [
-                                        Expanded(
-                                            flex: 1,
-                                            child: Text('pengen nangis')
-                                        )
-                                      ],
-                                    )
-                                  )
-                                ],
-                              )
-                            ),
-                          ]
-                      )
-                  )
-                );
-              }
-          );
-        }
-    );
+                                      Expanded(
+                                          flex: 1, child: Text('pengen nangis'))
+                                    ],
+                                  ))
+                            ],
+                          )),
+                    ])));
+          });
+        });
   }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////// SELECTDATE
@@ -321,49 +315,54 @@ class _mainPageState extends State<mainPage> {
                 ListTile(
                   leading: CircleAvatar(
                     radius: 20,
-                    child: Icon(doc["akun_trx"] == "BRI" ? Icons.money_off_csred_outlined : Icons.attach_money_outlined, color: Colors.white),
-                    backgroundColor: doc["akun_trx"] == "BRI" ? Colors.redAccent : Colors.greenAccent,
+                    child: Icon(
+                        doc["akun_trx"] == "BRI"
+                            ? Icons.money_off_csred_outlined
+                            : Icons.attach_money_outlined,
+                        color: Colors.white),
+                    backgroundColor: doc["akun_trx"] == "BRI"
+                        ? Colors.redAccent
+                        : Colors.greenAccent,
                   ),
                   title: Text(doc["jenis_trx"],
                       style: TextStyle(
                         fontSize: 13,
                       )),
-                  subtitle:
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(doc["akun_trx"],
-                            style: TextStyle(
-                              fontSize: 12,
-                            )),
-                        Text(
-                          "${doc["tanggal_trx"].toDate()}".split(' ')[0],
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(doc["akun_trx"],
                           style: TextStyle(
-                            fontSize: 10,
-                          ),
+                            fontSize: 12,
+                          )),
+                      Text(
+                        "${doc["tanggal_trx"].toDate()}".split(' ')[0],
+                        style: TextStyle(
+                          fontSize: 10,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
+                  ),
                   dense: true,
                   onTap: () => showDetails(context),
-                  trailing:Text('Rp${doc["jumlah_trx"]}',
+                  trailing: Text('Rp${doc["jumlah_trx"]}',
                       style: TextStyle(
                         fontSize: 20,
-                        color: doc["akun_trx"] == "BRI" ? Colors.redAccent : Colors.greenAccent[400],
+                        color: doc["akun_trx"] == "BRI"
+                            ? Colors.redAccent
+                            : Colors.greenAccent[400],
                       )),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top:10.0),
-                  child:
-                  Divider(
+                  padding: const EdgeInsets.only(top: 10.0),
+                  child: Divider(
                     // color: doc["akun_trx"] == "BRI" ? Colors.redAccent : Colors.greenAccent,
                     height: 0,
                     thickness: 0.7,
                   ),
                 ),
               ]),
-        )
-        );
+        ));
       });
     });
     setState(() {
@@ -371,12 +370,85 @@ class _mainPageState extends State<mainPage> {
     });
   }
 
+  void updateAllData() {
+    num income = 0;
+    num expense = 0;
+    num inex = 0;
+    num totAkun = 0;
+
+    FirebaseFirestore.instance
+        .collection('transactions')
+        .where('jenis_trx', isEqualTo: 'Income')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        income = income + doc['jumlah_trx'];
+
+        FirebaseFirestore.instance
+            .collection('inexData')
+            .doc('inex')
+            .update({'jumlah_in': income})
+            .then((value) => print("Income Updated"))
+            .catchError((error) => print("Failed to update Income: $error"));
+      });
+    });
+
+    FirebaseFirestore.instance
+        .collection('transactions')
+        .where('jenis_trx', isEqualTo: 'Expense')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        expense = expense + doc['jumlah_trx'];
+
+        FirebaseFirestore.instance
+            .collection('inexData')
+            .doc('inex')
+            .update({'jumlah_ex': expense})
+            .then((value) => print("expense Updated"))
+            .catchError((error) => print("Failed to update expense: $error"));
+      });
+    });
+
+    FirebaseFirestore.instance
+        .collection('transactions')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        inex = inex + doc['jumlah_trx'];
+
+        FirebaseFirestore.instance
+            .collection('inexData')
+            .doc('inex')
+            .update({'jumlah_inex': inex})
+            .then((value) => print("inex Updated"))
+            .catchError((error) => print("Failed to update inex: $error"));
+      });
+    });
+
+    FirebaseFirestore.instance
+        .collection('accounts')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        totAkun = totAkun + doc['jumlah_akun'];
+
+        FirebaseFirestore.instance
+            .collection('inexData')
+            .doc('inex')
+            .update({'total_account': totAkun})
+            .then((value) => print("totAkun Updated"))
+            .catchError((error) => print("Failed to update totAkun: $error"));
+      });
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    updateAllData();
     getPostsData();
   }
-
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////  MAINPAGE BUILD
   @override
@@ -410,11 +482,11 @@ class _mainPageState extends State<mainPage> {
                         TextButton(
                           onPressed: () => _selectDate(context),
                           child:
-                          Text("${selectedDate.toLocal()}".split(' ')[0]),
+                              Text("${selectedDate.toLocal()}".split(' ')[0]),
                         ),
                         IconButton(
                             icon:
-                            const Icon(Icons.keyboard_arrow_right_rounded),
+                                const Icon(Icons.keyboard_arrow_right_rounded),
                             onPressed: () {
                               setState(() {
                                 selectedDate =
@@ -443,21 +515,20 @@ class _mainPageState extends State<mainPage> {
           /////////////////////////////////////////////////////////////////////////  CONTENT
           Expanded(
               child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('transactions')
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  // if (!snapshot.hasData) return const Text('Loading...');
-                  return ListView.builder(
-                    itemCount: itemsData.length,
-                    physics: BouncingScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return itemsData[index];
-                    },
-                  );
+            stream: FirebaseFirestore.instance
+                .collection('transactions')
+                .snapshots(),
+            builder: (context, snapshot) {
+              // if (!snapshot.hasData) return const Text('Loading...');
+              return ListView.builder(
+                itemCount: itemsData.length,
+                physics: BouncingScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return itemsData[index];
                 },
-              )
-          ),
+              );
+            },
+          )),
         ],
       ),
 

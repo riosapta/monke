@@ -2,13 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '/recordsData.dart';
 import 'detailsAccount.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class mainAccounts extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _mainAccountsState();
 }
+
 class _mainAccountsState extends State<mainAccounts> {
   List<Widget> itemsData = [];
+
+  final Stream _inexStream =
+      FirebaseFirestore.instance.collection('inexData').doc('inex').snapshots();
 
   void onSelected(BuildContext context, int item) {
     switch (item) {
@@ -25,14 +30,13 @@ class _mainAccountsState extends State<mainAccounts> {
   }
 
   void getPostsData() {
-    List<dynamic> responseList = RECORDS_DATA;
+    // List<dynamic> responseList = RECORDS_DATA;
     List<Widget> listItems = [];
-    // FirebaseFirestore.instance
-    //     .collection('transactions')
-    //     .get()
-    //     .then((QuerySnapshot querySnapshot) {
-    //   querySnapshot.docs.forEach((doc) {
-    responseList.forEach((post) {
+    FirebaseFirestore.instance
+        .collection('accounts')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
         listItems.add(Padding(
           padding: const EdgeInsets.symmetric(vertical: 5.0),
           child: Column(
@@ -41,30 +45,26 @@ class _mainAccountsState extends State<mainAccounts> {
                 ListTile(
                   leading: CircleAvatar(
                     radius: 15,
-                    child: Icon(Icons.monetization_on_outlined, color: Colors.black),
+                    child: Icon(Icons.monetization_on_outlined,
+                        color: Colors.black),
                     backgroundColor: Colors.tealAccent,
                   ),
-                  title: Text(post["account"]),
-                  onTap: () => {Navigator.pushNamed(context, '/detailsaccount')},
-                  trailing:Row(
+                  title: Text(doc['nama_akun']),
+                  onTap: () =>
+                      {Navigator.pushNamed(context, '/detailsaccount')},
+                  trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      Text("${post["amount"]}",
+                      Text("${doc["jumlah_akun"]}",
                           style: TextStyle(
                             fontSize: 20,
                           )),
                       PopupMenuButton<int>(
                         onSelected: (item) => onSelected(context, item),
                         itemBuilder: (context) => [
-                          PopupMenuItem<int>(
-                              value: 0,
-                              child: Text('Details')),
-                          PopupMenuItem<int>(
-                              value: 1,
-                              child: Text('Edit')),
-                          PopupMenuItem<int>(
-                              value: 2,
-                              child: Text('Delete')),
+                          PopupMenuItem<int>(value: 0, child: Text('Details')),
+                          PopupMenuItem<int>(value: 1, child: Text('Edit')),
+                          PopupMenuItem<int>(value: 2, child: Text('Delete')),
                         ],
                       ),
                       // IconButton(onPressed: (){{Navigator.pushNamed(context, '/editaccount');}}, icon: Icon(Icons.more_vert),),
@@ -72,55 +72,90 @@ class _mainAccountsState extends State<mainAccounts> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top:5.0),
-                  child:
-                  Divider(
+                  padding: const EdgeInsets.only(top: 5.0),
+                  child: Divider(
                     height: 0,
                     thickness: 0.7,
                   ),
                 ),
               ]),
-        )
-        );
+        ));
+      });
     });
-    // }
     setState(() {
       itemsData = listItems;
+    });
+  }
+
+  void updateAllData() {
+    num jumlah = 0;
+    num totAkun = 0;
+
+    FirebaseFirestore.instance
+        .collection('accounts')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        FirebaseFirestore.instance
+            .collection('transactions')
+            .where('akun_trx', isEqualTo: doc['nama_akun'])
+            .get()
+            .then((QuerySnapshot querySnapshot) {
+          querySnapshot.docs.forEach((doc1) {
+            jumlah = jumlah + doc1['jumlah_trx'];
+
+            FirebaseFirestore.instance
+                .collection('accounts')
+                .doc(doc.id)
+                .update({'jumlah_akun': jumlah})
+                .then((value) => print("Income Updated"))
+                .catchError(
+                    (error) => print("Failed to update Income: $error"));
+          });
+        });
+      });
     });
   }
 
   @override
   void initState() {
     super.initState();
+    updateAllData();
     getPostsData();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: <Widget> [
-          Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
-                child:
-                Column(
-                  children: <Widget>[
+    return StreamBuilder(
+        stream: _inexStream,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Text("Loading...");
+          }
+          Map<String, dynamic> data =
+              snapshot.data!.data() as Map<String, dynamic>;
+          return Scaffold(
+            body: Column(children: <Widget>[
+              Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
+                  child: Column(children: <Widget>[
                     Container(
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(15),
-                            topLeft: Radius.circular(15),
-                          ),
-                          color: Colors.tealAccent[400],
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(15),
+                          topLeft: Radius.circular(15),
+                        ),
+                        color: Colors.tealAccent[400],
                       ),
                       width: double.maxFinite,
-                      padding: EdgeInsets.symmetric(vertical:5),
-                       //define the background color
+                      padding: EdgeInsets.symmetric(vertical: 5),
+                      //define the background color
                       child: Center(
-                        child: Text('Overall',
+                        child: Text(
+                          'Overall',
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
@@ -134,173 +169,179 @@ class _mainAccountsState extends State<mainAccounts> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: <Widget>[
                             InkWell(
-                              onTap: () {print('tapped');},
-                              child:
-                                Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                    children: <Widget>[
-                                      Expanded(
-                                          child: Container(
-                                            padding: EdgeInsets.fromLTRB(0, 5.0, 5.0, 5.0),
-                                            child: Text('Total Balance',
-                                                style: TextStyle(
-                                                  fontSize: 13,
-                                                )
-                                            ),
-                                          )
-                                      ),
-                                      Text('RpXXX.XXX,XX',
+                              onTap: () {
+                                print('tapped');
+                              },
+                              child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: <Widget>[
+                                    Expanded(
+                                        child: Container(
+                                      padding:
+                                          EdgeInsets.fromLTRB(0, 5.0, 5.0, 5.0),
+                                      child: Text('Total Balance',
                                           style: TextStyle(
-                                            fontSize: 17,
+                                            fontSize: 13,
                                           )),
-                                    ]
-                                ),
+                                    )),
+                                    Text('Rp${data['total_account']}',
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                        )),
+                                  ]),
                             ),
                             Divider(
                               color: Colors.grey[400],
                               thickness: 0.7,
                             ),
                             InkWell(
-                              onTap: () {print('tapped');},
-                              child:
-                                Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                    children: <Widget>[
-                                      Expanded(
-                                          child: Container(
-                                            padding: EdgeInsets.fromLTRB(0, 5.0, 5.0, 5.0),
-                                            child: Text('Total Income',
-                                                style: TextStyle(
-                                                  fontSize: 13,
-                                                )
-                                            ),
-                                          )
-                                      ),
-                                      Text('RpXXX.XXX,XX',
+                              onTap: () {
+                                print('tapped');
+                              },
+                              child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: <Widget>[
+                                    Expanded(
+                                        child: Container(
+                                      padding:
+                                          EdgeInsets.fromLTRB(0, 5.0, 5.0, 5.0),
+                                      child: Text('Total Income',
                                           style: TextStyle(
-                                            fontSize: 17,
+                                            fontSize: 13,
                                           )),
-                                    ]
-                                ),
+                                    )),
+                                    Text('Rp${data['jumlah_in']}',
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                        )),
+                                  ]),
                             ),
                             Divider(
                               color: Colors.lightGreenAccent[400],
                               thickness: 0.7,
                             ),
                             InkWell(
-                              onTap: () {print('tapped');},
-                              child:
-                                Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                    children: <Widget>[
-                                      Expanded(
-                                          child: Container(
-                                            padding: EdgeInsets.fromLTRB(0, 5.0, 5.0, 5.0),
-                                            child: Text('Total Expense',
-                                                style: TextStyle(
-                                                  fontSize: 13,
-                                                )
-                                            ),
-                                          )
-                                      ),
-                                      Text('RpXXX.XXX,XX',
+                              onTap: () {
+                                print('tapped');
+                              },
+                              child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: <Widget>[
+                                    Expanded(
+                                        child: Container(
+                                      padding:
+                                          EdgeInsets.fromLTRB(0, 5.0, 5.0, 5.0),
+                                      child: Text('Total Expense',
                                           style: TextStyle(
-                                            fontSize: 17,
+                                            fontSize: 13,
                                           )),
-                                    ]
-                                ),
+                                    )),
+                                    Text('Rp${data['jumlah_ex']}',
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                        )),
+                                  ]),
                             ),
                             Divider(
                               color: Colors.redAccent[100],
                               thickness: 0.7,
                             ),
-                      ]),
+                          ]),
                     ),
-                ])
-          ),
+                  ])),
 
-          Padding(
-            padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
-            child:
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Accounts',
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Accounts',
+                      style: TextStyle(
+                        fontSize: 14,
+                      ),
+                    ),
+                    Divider(
+                      height: 10,
+                      thickness: 0.7,
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                  child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('accounts')
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  // if (!snapshot.hasData) return const Text('Loading...');
+                  return ListView.builder(
+                    itemCount: itemsData.length,
+                    physics: BouncingScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return itemsData[index];
+                    },
+                  );
+                },
+              )),
+              // Expanded(
+              //   child:
+              //     Card(
+              //         shape: RoundedRectangleBorder(
+              //           borderRadius: BorderRadius.circular(15.0),
+              //         ),
+              //         margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 30),
+              //         child:
+              //         Column(
+              //             children: <Widget>[
+              //               Container(
+              //                 decoration: BoxDecoration(
+              //                   borderRadius: BorderRadius.only(
+              //                     topRight: Radius.circular(15),
+              //                     topLeft: Radius.circular(15),
+              //                   ),
+              //                   color: Colors.tealAccent[400],
+              //                 ),
+              //                 width: double.maxFinite,
+              //                 padding: EdgeInsets.symmetric(vertical:5),
+              //                 //define the background color
+              //                 child: Center(
+              //                   child: Text('Accounts',
+              //                     style: TextStyle(
+              //                       fontSize: 12,
+              //                       fontWeight: FontWeight.bold,
+              //                     ),
+              //                   ),
+              //                 ),
+              //               ),
+              //               Expanded(
+              //                 child: ListView.builder(
+              //                   itemCount: itemsData.length,
+              //                   itemBuilder: (context, index) {
+              //                     return itemsData[index];
+              //                   },
+              //                 ),
+              //               ),
+              //             ])
+              //     ),
+              // ),
+            ]),
+            floatingActionButton: FloatingActionButton.extended(
+              onPressed: () => Navigator.pushNamed(context, '/addaccount'),
+              icon: Icon(Icons.add_circle_outline, color: Colors.black),
+              label: Text('Add New Account',
                   style: TextStyle(
-                          fontSize: 14,
-                        ),
-                ),
-                Divider(
-                  height: 10,
-                  thickness: 0.7,
-                ),
-              ],
+                    fontSize: 12,
+                    color: Colors.black,
+                  )),
+              backgroundColor: Colors.amber[200],
             ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: itemsData.length,
-              itemBuilder: (context, index) {
-                return itemsData[index];
-              },
-            ),
-          ),
-          // Expanded(
-          //   child:
-          //     Card(
-          //         shape: RoundedRectangleBorder(
-          //           borderRadius: BorderRadius.circular(15.0),
-          //         ),
-          //         margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 30),
-          //         child:
-          //         Column(
-          //             children: <Widget>[
-          //               Container(
-          //                 decoration: BoxDecoration(
-          //                   borderRadius: BorderRadius.only(
-          //                     topRight: Radius.circular(15),
-          //                     topLeft: Radius.circular(15),
-          //                   ),
-          //                   color: Colors.tealAccent[400],
-          //                 ),
-          //                 width: double.maxFinite,
-          //                 padding: EdgeInsets.symmetric(vertical:5),
-          //                 //define the background color
-          //                 child: Center(
-          //                   child: Text('Accounts',
-          //                     style: TextStyle(
-          //                       fontSize: 12,
-          //                       fontWeight: FontWeight.bold,
-          //                     ),
-          //                   ),
-          //                 ),
-          //               ),
-          //               Expanded(
-          //                 child: ListView.builder(
-          //                   itemCount: itemsData.length,
-          //                   itemBuilder: (context, index) {
-          //                     return itemsData[index];
-          //                   },
-          //                 ),
-          //               ),
-          //             ])
-          //     ),
-          // ),
-        ]
-      ),
-
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => Navigator.pushNamed(context, '/addaccount'),
-        icon: Icon(Icons.add_circle_outline, color: Colors.black),
-        label: Text('Add New Account',
-        style: TextStyle(
-          fontSize: 12,
-          color: Colors.black,
-        )),
-        backgroundColor: Colors.amber[200],
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      );
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+          );
+        });
   }
 }
