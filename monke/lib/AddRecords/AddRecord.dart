@@ -18,11 +18,12 @@ class _addRecordState extends State<AddRecord> {
   List<String> lstTwo = ['Income', 'Expense', 'Transfer'];
   DateTime selectedDate = DateTime.now();
   TimeOfDay time = TimeOfDay.now();
-  String selectedJenis = '';
+  String selectedJenis = 'Income';
   final amountController = TextEditingController();
   final noteController = TextEditingController();
   int inputAmount = 0;
-  List<Widget> itemsData = [];
+  List<Widget> accData = [];
+  List<Widget> catData = [];
   int accIndex = 0;
 
   String currency =
@@ -74,7 +75,7 @@ class _addRecordState extends State<AddRecord> {
 
   Widget customRadio2(String txt, int index) {
     return OutlinedButton(
-      onPressed: () => changeSecondaryIndex(index),
+      onPressed: () {changeSecondaryIndex(index); categoryList(); selectedCategory = 'Select Category'; },
       style: ElevatedButton.styleFrom(
         primary: Colors.white,
         shape:
@@ -89,6 +90,48 @@ class _addRecordState extends State<AddRecord> {
             color: secondaryIndex == index ? Colors.teal : Colors.grey),
       ),
     );
+  }
+
+  Widget getCategories(int idx) {
+    Widget child;
+    if (idx == 0) {
+      return Expanded(
+          child: StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection('category')
+                .where('tipe_cat', isEqualTo: 'income')
+                .snapshots(),
+            builder: (context, snapshot) {
+              // if (!snapshot.hasData) return const Text('Loading...');
+              return ListView.builder(
+                itemCount: catData.length,
+                physics: BouncingScrollPhysics(),
+                itemBuilder: (context, idx3) {
+                  return catData[idx3];
+                },
+              );
+            },
+          ));
+    } else if (idx == 1) {
+      return Expanded(
+          child: StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection('category')
+                .where('tipe_cat', isEqualTo: 'expense')
+                .snapshots(),
+            builder: (context, snapshot) {
+              // if (!snapshot.hasData) return const Text('Loading...');
+              return ListView.builder(
+                itemCount: catData.length,
+                physics: BouncingScrollPhysics(),
+                itemBuilder: (context, idx3) {
+                  return catData[idx3];
+                },
+              );
+            },
+          ));
+    }
+    return SizedBox.shrink();
   }
 
   void categoryButtonPressed() {
@@ -129,55 +172,7 @@ class _addRecordState extends State<AddRecord> {
                 color: Colors.black,
                 height: 0,
               ),
-              Expanded(
-                child: SizedBox(
-                  height: 700,
-                  child: ListView(
-                    children: <Widget>[
-                      ListTile(
-                        leading: Icon(Icons.circle),
-                        title: Text('Category S'),
-                        onTap: () => selectCategory('Category S'),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.circle),
-                        title: Text('Category T'),
-                        onTap: () => selectCategory('Category T'),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.circle),
-                        title: Text('Category U'),
-                        onTap: () => selectCategory('Category U'),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.circle),
-                        title: Text('Category V'),
-                        onTap: () => selectCategory('Category V'),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.circle),
-                        title: Text('Category W'),
-                        onTap: () => selectCategory('Category W'),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.circle),
-                        title: Text('Category X'),
-                        onTap: () => selectCategory('Category X'),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.circle),
-                        title: Text('Category Y'),
-                        onTap: () => selectCategory('Category Y'),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.circle),
-                        title: Text('Category Z'),
-                        onTap: () => selectCategory('Category Z'),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              getCategories(secondaryIndex),
               Divider(
                 color: Colors.black,
                 height: 0,
@@ -204,7 +199,49 @@ class _addRecordState extends State<AddRecord> {
     });
   }
 
-  void accountlist(){
+  void categoryList(){
+    List<Widget> listCat = [];
+    if(secondaryIndex == 0){
+      FirebaseFirestore.instance
+          .collection('category')
+          .where('tipe_cat', isEqualTo: 'income')
+          .get()
+          .then((QuerySnapshot querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+          listCat.add(
+              ListTile(
+                leading: Icon(Icons.circle),
+                title: Text(doc.id),
+                onTap: () => selectCategory(doc.id),
+              )
+          );
+        });
+      });
+    }
+    else if(secondaryIndex == 1){
+      FirebaseFirestore.instance
+          .collection('category')
+          .where('tipe_cat', isEqualTo: 'expense')
+          .get()
+          .then((QuerySnapshot querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+          listCat.add(
+              ListTile(
+                leading: Icon(Icons.circle),
+                title: Text(doc.id),
+                onTap: () => selectCategory(doc.id),
+              )
+          );
+        });
+      });
+    }
+
+    setState(() {
+      catData = listCat;
+    });
+  }
+
+  void accountList(){
     List<Widget> listItems = [];
     FirebaseFirestore.instance
         .collection('accounts')
@@ -221,14 +258,15 @@ class _addRecordState extends State<AddRecord> {
       });
     });
     setState(() {
-      itemsData = listItems;
+      accData = listItems;
     });
   }
 
   @override
   void initState() {
     super.initState();
-    accountlist();
+    accountList();
+    categoryList();
   }
   void accountButtonPressed() {
     showModalBottomSheet<dynamic>(
@@ -269,7 +307,6 @@ class _addRecordState extends State<AddRecord> {
                 height: 0,
               ),
               Expanded(
-
                 child:StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
                       .collection('accounts')
@@ -279,10 +316,10 @@ class _addRecordState extends State<AddRecord> {
                       return const Text('Loading...');
                     } else if (snapshot.hasData){
                       return ListView.builder(
-                        itemCount: itemsData.length,
+                        itemCount: accData.length,
                         physics: BouncingScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return itemsData[index];
+                        itemBuilder: (context, idx2) {
+                          return accData[idx2];
                         },
                       );
                     } else return const Text ('Error');
