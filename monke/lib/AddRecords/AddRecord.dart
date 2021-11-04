@@ -22,6 +22,8 @@ class _addRecordState extends State<AddRecord> {
   final amountController = TextEditingController();
   final noteController = TextEditingController();
   int inputAmount = 0;
+  List<Widget> itemsData = [];
+  int accIndex = 0;
 
   String currency =
       'Rp'; ///////////////////////////////////////////////////////////////////////////////// CURRENCY
@@ -202,6 +204,32 @@ class _addRecordState extends State<AddRecord> {
     });
   }
 
+  void accountlist(){
+    List<Widget> listItems = [];
+    FirebaseFirestore.instance
+        .collection('accounts')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        listItems.add(
+            ListTile(
+              leading: Icon(Icons.circle),
+              title: Text(doc['nama_akun']),
+              onTap: () => selectAccount(doc['nama_akun']),
+            )
+        );
+      });
+    });
+    setState(() {
+      itemsData = listItems;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    accountlist();
+  }
   void accountButtonPressed() {
     showModalBottomSheet<dynamic>(
         shape: RoundedRectangleBorder(
@@ -241,28 +269,29 @@ class _addRecordState extends State<AddRecord> {
                 height: 0,
               ),
               Expanded(
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.75,
-                  child: ListView(
-                    children: <Widget>[
-                      ListTile(
-                        leading: Icon(Icons.circle),
-                        title: Text('Cash'),
-                        onTap: () => selectAccount('Cash'),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.circle),
-                        title: Text('Bank'),
-                        onTap: () => selectAccount('Bank'),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.circle),
-                        title: Text('Saving'),
-                        onTap: () => selectAccount('Saving'),
-                      ),
-                    ],
-                  ),
-                ),
+
+                child:StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('accounts')
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Text('Loading...');
+                    } else if (snapshot.hasData){
+                      return ListView.builder(
+                        itemCount: itemsData.length,
+                        physics: BouncingScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return itemsData[index];
+                        },
+                      );
+                    } else return const Text ('Error');
+                  },
+                )
+                // SizedBox(
+                //   height: MediaQuery.of(context).size.height * 0.75,
+                //   child:
+                // ),
               ),
               Divider(
                 color: Colors.black,
@@ -286,7 +315,12 @@ class _addRecordState extends State<AddRecord> {
   void selectAccount(String name) {
     Navigator.pop(context);
     setState(() {
-      selectedAccount = name;
+      if(accIndex == 1){
+        selectedAccount = name;
+      }
+      else if(accIndex == 2){
+        selectedAccount2 = name;
+      }
     });
   }
 
@@ -303,6 +337,7 @@ class _addRecordState extends State<AddRecord> {
                 TextButton(
                   onPressed: () => setState(() {
                     accountButtonPressed();
+                    accIndex = 1;
                   }),
                   child: Text('$selectedAccount'),
                   style: ButtonStyle(),
@@ -314,6 +349,7 @@ class _addRecordState extends State<AddRecord> {
                 TextButton(
                   onPressed: () => setState(() {
                     accountButtonPressed();
+                    accIndex = 2;
                   }),
                   child: Text('$selectedAccount2'),
                   style: ButtonStyle(),
@@ -342,6 +378,7 @@ class _addRecordState extends State<AddRecord> {
                 TextButton(
                   onPressed: () => setState(() {
                     accountButtonPressed();
+                    accIndex = 1;
                   }),
                   child: Text('$selectedAccount'),
                   style: ButtonStyle(),

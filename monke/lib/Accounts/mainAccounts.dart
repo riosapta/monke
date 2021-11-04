@@ -55,7 +55,7 @@ class _mainAccountsState extends State<mainAccounts> {
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      Text("${doc["jumlah_akun"]}",
+                      Text('Rp${doc["jumlah_akun"]}',
                           style: TextStyle(
                             fontSize: 20,
                           )),
