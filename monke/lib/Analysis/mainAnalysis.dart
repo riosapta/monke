@@ -40,10 +40,8 @@ class _mainAnalysisState extends State<mainAnalysis> {
         side: BorderSide(color: secondaryIndex == index ? Colors.teal : Colors.grey, width: 2),
       ),
       child:
-        Flexible(
-          child:
-          Text(txt,style: TextStyle(color: secondaryIndex == index ?Colors.teal : Colors.grey),textAlign: TextAlign.center,),
-        )
+        Text(txt,style: TextStyle(color: secondaryIndex == index ?Colors.teal : Colors.grey),textAlign: TextAlign.center,),
+
 
     );
   }
@@ -55,7 +53,7 @@ class _mainAnalysisState extends State<mainAnalysis> {
             children: <Widget>[
 
       ///////////////////////////////////////////////////////////////////////// DATE AND TIME
-        /*Container(
+        Container(
           padding: EdgeInsets.fromLTRB(5, 5, 5, 0),
           child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -105,7 +103,7 @@ class _mainAnalysisState extends State<mainAnalysis> {
             color: Colors.grey[400],
             height: 0,
           ),
-          Container(
+          Padding(
             padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -117,13 +115,13 @@ class _mainAnalysisState extends State<mainAnalysis> {
               ],
             ),
           ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            PieChartSample2(),
-            Text('pengennangis'),
-          ],
-        ),*/
+        // Column(
+        //   crossAxisAlignment: CrossAxisAlignment.start,
+        //   children: [
+        //     PieChartSample2(),
+        //     Text('pengennangis'),
+        //   ],
+        // ),
       ])
     );
   }
