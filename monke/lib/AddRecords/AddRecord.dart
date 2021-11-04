@@ -451,12 +451,13 @@ class _addRecordState extends State<AddRecord> {
                 )),
             ElevatedButton.icon(
               onPressed: () {
-                addTrx(
+                Navigator.pop(context);
+                /*addTrx(
                     int.parse(amountController.text
                         .replaceAll('Rp', '')
                         .replaceAll(',', '')
                         .replaceAll('.00', '')),
-                    noteController.text);
+                    noteController.text);*/
               },
               icon: Icon(Icons.add_circle_outline),
               label: Text('Add',
