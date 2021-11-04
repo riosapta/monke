@@ -92,7 +92,7 @@ class _editAccountState extends State<EditAccount>{
                         )
                     ),
                     ElevatedButton.icon(
-                      onPressed: () {},
+                      onPressed: () {Navigator.pop(context);},
                       icon: Icon(Icons.edit),
                       label: Text('Edit',
                           style: TextStyle(

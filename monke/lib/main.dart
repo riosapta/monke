@@ -517,7 +517,7 @@ class _mainPageState extends State<mainPage> {
                     child: IconButton(
                       icon: const Icon(Icons.filter_list_alt),
                       onPressed: () {
-                        Navigator.pushNamed(context, '/filterby');
+                        Navigator.pushReplacementNamed(context, '/filterby');
                       },
                     ),
                   ),
@@ -553,6 +553,7 @@ class _mainPageState extends State<mainPage> {
 
       ///////////////////////////////////////////////////////////////////////// FLOATING ACTION BUTTON
       floatingActionButton: FloatingActionButton.extended(
+          heroTag: "btn1",
         onPressed: () => Navigator.pushNamed(context, '/addrecord'),
         icon: Icon(Icons.add_circle_outline, color: Colors.black),
         label: Text('Add New Records',

@@ -55,7 +55,7 @@ class _mainAnalysisState extends State<mainAnalysis> {
             children: <Widget>[
 
       ///////////////////////////////////////////////////////////////////////// DATE AND TIME
-        Container(
+        /*Container(
           padding: EdgeInsets.fromLTRB(5, 5, 5, 0),
           child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -123,7 +123,7 @@ class _mainAnalysisState extends State<mainAnalysis> {
             PieChartSample2(),
             Text('pengennangis'),
           ],
-        ),
+        ),*/
       ])
     );
   }

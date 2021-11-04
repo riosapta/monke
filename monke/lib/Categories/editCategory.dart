@@ -78,7 +78,7 @@ class _editCategoryState extends State<EditCategory>{
                         )
                     ),
                     ElevatedButton.icon(
-                      onPressed: () {},
+                      onPressed: () {Navigator.of(context).maybePop();},
                       icon: Icon(Icons.edit),
                       label: Text('Edit',
                           style: TextStyle(

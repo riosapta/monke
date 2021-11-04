@@ -330,6 +330,7 @@ class _mainAccountsState extends State<mainAccounts> {
               // ),
             ]),
             floatingActionButton: FloatingActionButton.extended(
+              heroTag: "btn2",
               onPressed: () => Navigator.pushNamed(context, '/addaccount'),
               icon: Icon(Icons.add_circle_outline, color: Colors.black),
               label: Text('Add New Account',
