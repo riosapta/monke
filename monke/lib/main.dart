@@ -320,15 +320,23 @@ class _mainPageState extends State<mainPage> {
                   leading: CircleAvatar(
                     radius: 20,
                     child: Icon(
-                        doc["akun_trx"] == "BRI"
+                        doc["jenis_trx"] == "Expense"
                             ? Icons.money_off_csred_outlined
-                            : Icons.attach_money_outlined,
+                            : doc["jenis_trx"] == "Income"
+                            ? Icons.attach_money_outlined
+                            : doc["jenis_trx"] == "Transfer"
+                            ? Icons.compare_arrows
+                            : Icons.close,
                         color: Colors.white),
-                    backgroundColor: doc["akun_trx"] == "BRI"
+                    backgroundColor: doc["jenis_trx"] == "Expense"
                         ? Colors.redAccent
-                        : Colors.greenAccent,
+                        : doc["jenis_trx"] == "Income"
+                        ? Colors.greenAccent[400]
+                        : doc["jenis_trx"] == "Transfer"
+                        ?Colors.blueAccent
+                        :Colors.black,
                   ),
-                  title: Text(doc["jenis_trx"],
+                  title: Text(doc["kategori_trx"],
                       style: TextStyle(
                         fontSize: 13,
                       )),
@@ -352,9 +360,13 @@ class _mainPageState extends State<mainPage> {
                   trailing: Text('Rp${doc["jumlah_trx"]}',
                       style: TextStyle(
                         fontSize: 20,
-                        color: doc["akun_trx"] == "BRI"
+                        color: doc["jenis_trx"] == "Expense"
                             ? Colors.redAccent
-                            : Colors.greenAccent[400],
+                            : doc["jenis_trx"] == "Income"
+                            ? Colors.greenAccent[400]
+                            : doc["jenis_trx"] == "Transfer"
+                            ?Colors.blueAccent
+                            :Colors.black,
                       )),
                 ),
                 Padding(

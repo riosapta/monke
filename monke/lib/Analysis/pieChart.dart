@@ -15,31 +15,35 @@ class PieChart2State extends State {
   @override
   Widget build(BuildContext context) {
     return
-              AspectRatio(
-                aspectRatio: 2,
-                child: PieChart(
-                  PieChartData(
-                      pieTouchData: PieTouchData(touchCallback:
-                          (FlTouchEvent event, pieTouchResponse) {
-                        setState(() {
-                          if (!event.isInterestedForInteractions ||
-                              pieTouchResponse == null ||
-                              pieTouchResponse.touchedSection == null) {
-                            touchedIndex = -1;
-                            return;
-                          }
-                          touchedIndex = pieTouchResponse
-                              .touchedSection!.touchedSectionIndex;
-                        });
-                      }),
-                      borderData: FlBorderData(
-                        show: false,
-                      ),
-                      sectionsSpace: 0,
-                      centerSpaceRadius: 40,
-                      sections: showingSections()),
-                ),
-              );
+      Column(
+        children: [
+          AspectRatio(
+            aspectRatio: 2,
+            child: PieChart(
+              PieChartData(
+                  pieTouchData: PieTouchData(touchCallback:
+                      (FlTouchEvent event, pieTouchResponse) {
+                    setState(() {
+                      if (!event.isInterestedForInteractions ||
+                          pieTouchResponse == null ||
+                          pieTouchResponse.touchedSection == null) {
+                        touchedIndex = -1;
+                        return;
+                      }
+                      touchedIndex = pieTouchResponse
+                          .touchedSection!.touchedSectionIndex;
+                    });
+                  }),
+                  borderData: FlBorderData(
+                    show: false,
+                  ),
+                  sectionsSpace: 0,
+                  centerSpaceRadius: 40,
+                  sections: showingSections()),
+            ),
+          ),
+        ],
+      );
             // Column(
             //   mainAxisSize: MainAxisSize.max,
             //   mainAxisAlignment: MainAxisAlignment.end,
