@@ -13,6 +13,7 @@ class AddRecord extends StatefulWidget {
 class _addRecordState extends State<AddRecord> {
   String selectedCategory = 'Select Category';
   String selectedAccount = 'Select Account';
+  String selectedAccount2 = 'Select Account';
   int secondaryIndex = 0;
   List<String> lstTwo = ['Income', 'Expense', 'Transfer'];
   DateTime selectedDate = DateTime.now();
@@ -289,6 +290,67 @@ class _addRecordState extends State<AddRecord> {
     });
   }
 
+  Widget transferOpt(int idx){
+    if(idx == 2){
+      return Container(
+        //margin: EdgeInsets.only(top: 10),
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Text('from:'),
+              Column(children: [
+                //Text('Category:'),
+                TextButton(
+                  onPressed: () => setState(() {
+                    accountButtonPressed();
+                  }),
+                  child: Text('$selectedAccount'),
+                  style: ButtonStyle(),
+                ),
+              ]),
+              Text('to:'),
+              Column(children: [
+                //Text('Account:'),
+                TextButton(
+                  onPressed: () => setState(() {
+                    accountButtonPressed();
+                  }),
+                  child: Text('$selectedAccount2'),
+                  style: ButtonStyle(),
+                ),
+              ]),
+            ]),
+      );
+    }else{
+      return Container(
+        //margin: EdgeInsets.only(top: 10),
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Column(children: [
+                //Text('Category:'),
+                TextButton(
+                  onPressed: () => setState(() {
+                    categoryButtonPressed();
+                  }),
+                  child: Text('$selectedCategory'),
+                  style: ButtonStyle(),
+                ),
+              ]),
+              Column(children: [
+                //Text('Account:'),
+                TextButton(
+                  onPressed: () => setState(() {
+                    accountButtonPressed();
+                  }),
+                  child: Text('$selectedAccount'),
+                  style: ButtonStyle(),
+                ),
+              ]),
+            ]),
+      );
+    }
+  }
   // void setAmount(String amount) {
   //   int intAmount = int.parse(amount);
   //   setState(() {
@@ -358,33 +420,7 @@ class _addRecordState extends State<AddRecord> {
                 ),
               ],
             ),
-            Container(
-              //margin: EdgeInsets.only(top: 10),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Column(children: [
-                      //Text('Category:'),
-                      TextButton(
-                        onPressed: () => setState(() {
-                          categoryButtonPressed();
-                        }),
-                        child: Text('$selectedCategory'),
-                        style: ButtonStyle(),
-                      ),
-                    ]),
-                    Column(children: [
-                      //Text('Account:'),
-                      TextButton(
-                        onPressed: () => setState(() {
-                          accountButtonPressed();
-                        }),
-                        child: Text('$selectedAccount'),
-                        style: ButtonStyle(),
-                      ),
-                    ]),
-                  ]),
-            ),
+            transferOpt(secondaryIndex),
             Container(
                 margin: EdgeInsets.all(10),
                 child: TextField(
