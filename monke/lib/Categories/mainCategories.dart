@@ -231,6 +231,7 @@ class _mainCategoriesState extends State<mainCategories> {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
+        heroTag: "btn3",
         onPressed: () => Navigator.pushNamed(context, '/addcategory'),
         icon: Icon(Icons.add_circle_outline, color: Colors.black),
         label: Text('Add New Category',

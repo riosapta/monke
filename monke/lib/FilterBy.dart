@@ -402,7 +402,7 @@ class _FilterByState extends State<FilterBy>{
                                     onPressed: () {
                                       print(Text('Display Opt: $displayOpt'));
                                       print(Text('Type Opt: $typeOpt'));
-                                      Navigator.of(context).pushNamed(
+                                      Navigator.of(context).pushReplacementNamed(
                                         '/passDataToHome',
                                         arguments: 'Hello there from the first page!',
                                       );

@@ -389,7 +389,7 @@ class _editRecordState extends State<EditRecord>{
                       )
                   ),
                   ElevatedButton.icon(
-                    onPressed: () {},
+                    onPressed: () {Navigator.pop(context);},
                     icon: Icon(Icons.edit),
                     label: Text('Edit',
                         style: TextStyle(
