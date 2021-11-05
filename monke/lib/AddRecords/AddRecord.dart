@@ -573,19 +573,20 @@ class _addRecordState extends State<AddRecord> {
                   if(selectedCategory == 'Select Category' || selectedCategory == 'Select Account'){
                     alertDialogCategory(context);
                   } else {
-                    Navigator.pop(context);
+                    /*addTrx(
+                    int.parse(amountController.text
+                        .replaceAll('Rp', '')
+                        .replaceAll(',', '')
+                        .replaceAll('.00', '')),
+                    noteController.text);*/
+                    Navigator.pushReplacementNamed(context, '/');
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Processing Data')),
                     );
                   }
                 }
 
-                /*addTrx(
-                    int.parse(amountController.text
-                        .replaceAll('Rp', '')
-                        .replaceAll(',', '')
-                        .replaceAll('.00', '')),
-                    noteController.text);*/
+
               },
               icon: Icon(Icons.add_circle_outline),
               label: Text('Add',
