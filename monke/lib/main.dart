@@ -9,6 +9,7 @@ import 'MainFunctions/Balance.dart';
 import 'Accounts/mainAccounts.dart';
 import 'Analysis/mainAnalysis.dart';
 import 'Categories/mainCategories.dart';
+import 'globals.dart' as globals;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -131,8 +132,10 @@ class mainPage extends StatefulWidget {
 class _mainPageState extends State<mainPage> {
   List<Widget> itemsData = [];
   DateTime selectedDate = DateTime.now();
+  CollectionReference deleteTrx =
+      FirebaseFirestore.instance.collection('transactions');
 /////////////////////////////////////////////////////////////////////////////////////////////////////////// DETAILS
-  void showDetails(BuildContext context) {
+  void showDetails(BuildContext context, DocumentSnapshot doc) {
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -171,7 +174,7 @@ class _mainPageState extends State<mainPage> {
                               Container(
                                 //margin: EdgeInsets.only(left:30),
                                 child: Text(
-                                  'Income',
+                                  doc["jenis_trx"],
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
@@ -181,13 +184,19 @@ class _mainPageState extends State<mainPage> {
                               Row(children: [
                                 IconButton(
                                     onPressed: () {
+                                      selectedDocID(doc.id);
                                       Navigator.pushNamed(
-                                          context, '/editrecord');
+                                          context, '/editrecord',
+                                          arguments: {'docID': doc.id});
                                     },
                                     icon: Icon(Icons
                                         .edit)), /////////////////////////////////////////EDIT
                                 IconButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      deleteField(doc.id);
+                                      updateAllData();
+                                      getPostsData();
+                                    },
                                     icon: Icon(Icons
                                         .delete)), /////////////////////////////////////DELETE
                               ])
@@ -202,7 +211,7 @@ class _mainPageState extends State<mainPage> {
                                 child: Container(
                                     padding: EdgeInsets.all(10),
                                     child: Text(
-                                      'Rp100,000.00',
+                                      'Rp${doc["jumlah_trx"]}',
                                       style: TextStyle(
                                         fontSize: 20,
                                         //fontWeight: FontWeight.bold,
@@ -226,7 +235,7 @@ class _mainPageState extends State<mainPage> {
                                                 fontWeight: FontWeight.bold,
                                               )),
                                           SizedBox(width: 20),
-                                          Text('Salary')
+                                          Text(doc["kategori_trx"])
                                         ]),
                                     SizedBox(height: 5),
                                     Row(
@@ -239,7 +248,7 @@ class _mainPageState extends State<mainPage> {
                                                 fontWeight: FontWeight.bold,
                                               )),
                                           SizedBox(width: 20),
-                                          Text('Bank')
+                                          Text(doc["akun_trx"])
                                         ]),
                                     SizedBox(height: 5),
                                     Row(
@@ -251,7 +260,8 @@ class _mainPageState extends State<mainPage> {
                                                 color: Colors.grey,
                                                 fontWeight: FontWeight.bold,
                                               )),
-                                          Text('3 Oct 2021, 11.23AM')
+                                          Text("${doc["tanggal_trx"].toDate()}"
+                                              .split(' ')[0])
                                         ]),
                                   ])),
                               SizedBox(height: 20),
@@ -275,7 +285,8 @@ class _mainPageState extends State<mainPage> {
                                     direction: Axis.horizontal,
                                     children: [
                                       Expanded(
-                                          flex: 1, child: Text('pengen nangis'))
+                                          flex: 1,
+                                          child: Text(doc["catatan_trx"]))
                                     ],
                                   ))
                             ],
@@ -283,6 +294,11 @@ class _mainPageState extends State<mainPage> {
                     ])));
           });
         });
+  }
+
+  void selectedDocID(docID) {
+    globals.globDocID = docID;
+    print(globals.globDocID);
   }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////// SELECTDATE
@@ -296,6 +312,14 @@ class _mainPageState extends State<mainPage> {
       setState(() {
         selectedDate = picked;
       });
+  }
+
+  Future<void> deleteField(docID) {
+    return deleteTrx
+        .doc(docID)
+        .delete()
+        .then((value) => print("Trx Deleted"))
+        .catchError((error) => print("Failed to delete Trx: $error"));
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////// GETPOSTDATA
@@ -344,7 +368,7 @@ class _mainPageState extends State<mainPage> {
                     ],
                   ),
                   dense: true,
-                  onTap: () => showDetails(context),
+                  onTap: () => showDetails(context, doc),
                   trailing: Text('Rp${doc["jumlah_trx"]}',
                       style: TextStyle(
                         fontSize: 20,
