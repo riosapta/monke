@@ -13,14 +13,18 @@ class AddRecord extends StatefulWidget {
 class _addRecordState extends State<AddRecord> {
   String selectedCategory = 'Select Category';
   String selectedAccount = 'Select Account';
+  String selectedAccount2 = 'Select Account';
   int secondaryIndex = 0;
   List<String> lstTwo = ['Income', 'Expense', 'Transfer'];
   DateTime selectedDate = DateTime.now();
   TimeOfDay time = TimeOfDay.now();
-  String selectedJenis = '';
+  String selectedJenis = 'Income';
   final amountController = TextEditingController();
   final noteController = TextEditingController();
   int inputAmount = 0;
+  List<Widget> accData = [];
+  List<Widget> catData = [];
+  int accIndex = 0;
 
   String currency =
       'Rp'; ///////////////////////////////////////////////////////////////////////////////// CURRENCY
@@ -71,7 +75,7 @@ class _addRecordState extends State<AddRecord> {
 
   Widget customRadio2(String txt, int index) {
     return OutlinedButton(
-      onPressed: () => changeSecondaryIndex(index),
+      onPressed: () {changeSecondaryIndex(index); categoryList(); selectedCategory = 'Select Category'; },
       style: ElevatedButton.styleFrom(
         primary: Colors.white,
         shape:
@@ -86,6 +90,48 @@ class _addRecordState extends State<AddRecord> {
             color: secondaryIndex == index ? Colors.teal : Colors.grey),
       ),
     );
+  }
+
+  Widget getCategories(int idx) {
+    Widget child;
+    if (idx == 0) {
+      return Expanded(
+          child: StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection('category')
+                .where('tipe_cat', isEqualTo: 'income')
+                .snapshots(),
+            builder: (context, snapshot) {
+              // if (!snapshot.hasData) return const Text('Loading...');
+              return ListView.builder(
+                itemCount: catData.length,
+                physics: BouncingScrollPhysics(),
+                itemBuilder: (context, idx3) {
+                  return catData[idx3];
+                },
+              );
+            },
+          ));
+    } else if (idx == 1) {
+      return Expanded(
+          child: StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection('category')
+                .where('tipe_cat', isEqualTo: 'expense')
+                .snapshots(),
+            builder: (context, snapshot) {
+              // if (!snapshot.hasData) return const Text('Loading...');
+              return ListView.builder(
+                itemCount: catData.length,
+                physics: BouncingScrollPhysics(),
+                itemBuilder: (context, idx3) {
+                  return catData[idx3];
+                },
+              );
+            },
+          ));
+    }
+    return SizedBox.shrink();
   }
 
   void categoryButtonPressed() {
@@ -126,55 +172,7 @@ class _addRecordState extends State<AddRecord> {
                 color: Colors.black,
                 height: 0,
               ),
-              Expanded(
-                child: SizedBox(
-                  height: 700,
-                  child: ListView(
-                    children: <Widget>[
-                      ListTile(
-                        leading: Icon(Icons.circle),
-                        title: Text('Category S'),
-                        onTap: () => selectCategory('Category S'),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.circle),
-                        title: Text('Category T'),
-                        onTap: () => selectCategory('Category T'),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.circle),
-                        title: Text('Category U'),
-                        onTap: () => selectCategory('Category U'),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.circle),
-                        title: Text('Category V'),
-                        onTap: () => selectCategory('Category V'),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.circle),
-                        title: Text('Category W'),
-                        onTap: () => selectCategory('Category W'),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.circle),
-                        title: Text('Category X'),
-                        onTap: () => selectCategory('Category X'),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.circle),
-                        title: Text('Category Y'),
-                        onTap: () => selectCategory('Category Y'),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.circle),
-                        title: Text('Category Z'),
-                        onTap: () => selectCategory('Category Z'),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              getCategories(secondaryIndex),
               Divider(
                 color: Colors.black,
                 height: 0,
@@ -201,6 +199,75 @@ class _addRecordState extends State<AddRecord> {
     });
   }
 
+  void categoryList(){
+    List<Widget> listCat = [];
+    if(secondaryIndex == 0){
+      FirebaseFirestore.instance
+          .collection('category')
+          .where('tipe_cat', isEqualTo: 'income')
+          .get()
+          .then((QuerySnapshot querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+          listCat.add(
+              ListTile(
+                leading: Icon(Icons.circle),
+                title: Text(doc.id),
+                onTap: () => selectCategory(doc.id),
+              )
+          );
+        });
+      });
+    }
+    else if(secondaryIndex == 1){
+      FirebaseFirestore.instance
+          .collection('category')
+          .where('tipe_cat', isEqualTo: 'expense')
+          .get()
+          .then((QuerySnapshot querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+          listCat.add(
+              ListTile(
+                leading: Icon(Icons.circle),
+                title: Text(doc.id),
+                onTap: () => selectCategory(doc.id),
+              )
+          );
+        });
+      });
+    }
+
+    setState(() {
+      catData = listCat;
+    });
+  }
+
+  void accountList(){
+    List<Widget> listItems = [];
+    FirebaseFirestore.instance
+        .collection('accounts')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        listItems.add(
+            ListTile(
+              leading: Icon(Icons.circle),
+              title: Text(doc['nama_akun']),
+              onTap: () => selectAccount(doc['nama_akun']),
+            )
+        );
+      });
+    });
+    setState(() {
+      accData = listItems;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    accountList();
+    categoryList();
+  }
   void accountButtonPressed() {
     showModalBottomSheet<dynamic>(
         shape: RoundedRectangleBorder(
@@ -240,28 +307,28 @@ class _addRecordState extends State<AddRecord> {
                 height: 0,
               ),
               Expanded(
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.75,
-                  child: ListView(
-                    children: <Widget>[
-                      ListTile(
-                        leading: Icon(Icons.circle),
-                        title: Text('Cash'),
-                        onTap: () => selectAccount('Cash'),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.circle),
-                        title: Text('Bank'),
-                        onTap: () => selectAccount('Bank'),
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.circle),
-                        title: Text('Saving'),
-                        onTap: () => selectAccount('Saving'),
-                      ),
-                    ],
-                  ),
-                ),
+                child:StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('accounts')
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Text('Loading...');
+                    } else if (snapshot.hasData){
+                      return ListView.builder(
+                        itemCount: accData.length,
+                        physics: BouncingScrollPhysics(),
+                        itemBuilder: (context, idx2) {
+                          return accData[idx2];
+                        },
+                      );
+                    } else return const Text ('Error');
+                  },
+                )
+                // SizedBox(
+                //   height: MediaQuery.of(context).size.height * 0.75,
+                //   child:
+                // ),
               ),
               Divider(
                 color: Colors.black,
@@ -285,10 +352,79 @@ class _addRecordState extends State<AddRecord> {
   void selectAccount(String name) {
     Navigator.pop(context);
     setState(() {
-      selectedAccount = name;
+      if(accIndex == 1){
+        selectedAccount = name;
+      }
+      else if(accIndex == 2){
+        selectedAccount2 = name;
+      }
     });
   }
 
+  Widget transferOpt(int idx){
+    if(idx == 2){
+      return Container(
+        //margin: EdgeInsets.only(top: 10),
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Text('from:'),
+              Column(children: [
+                //Text('Category:'),
+                TextButton(
+                  onPressed: () => setState(() {
+                    accountButtonPressed();
+                    accIndex = 1;
+                  }),
+                  child: Text('$selectedAccount'),
+                  style: ButtonStyle(),
+                ),
+              ]),
+              Text('to:'),
+              Column(children: [
+                //Text('Account:'),
+                TextButton(
+                  onPressed: () => setState(() {
+                    accountButtonPressed();
+                    accIndex = 2;
+                  }),
+                  child: Text('$selectedAccount2'),
+                  style: ButtonStyle(),
+                ),
+              ]),
+            ]),
+      );
+    }else{
+      return Container(
+        //margin: EdgeInsets.only(top: 10),
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Column(children: [
+                //Text('Category:'),
+                TextButton(
+                  onPressed: () => setState(() {
+                    categoryButtonPressed();
+                  }),
+                  child: Text('$selectedCategory'),
+                  style: ButtonStyle(),
+                ),
+              ]),
+              Column(children: [
+                //Text('Account:'),
+                TextButton(
+                  onPressed: () => setState(() {
+                    accountButtonPressed();
+                    accIndex = 1;
+                  }),
+                  child: Text('$selectedAccount'),
+                  style: ButtonStyle(),
+                ),
+              ]),
+            ]),
+      );
+    }
+  }
   // void setAmount(String amount) {
   //   int intAmount = int.parse(amount);
   //   setState(() {
@@ -316,6 +452,35 @@ class _addRecordState extends State<AddRecord> {
           .then((value) => print("Trx Added"))
           .catchError((error) => print("Failed to add trx: $error"));
     }
+
+    void alertDialogCategory(BuildContext context) {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return StatefulBuilder(builder: (context, setState) {
+              return AlertDialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                content: Text('You have to select category or account!',
+                    style: TextStyle(
+                      color: Colors.red,
+                    )),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'OK'),
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            }
+            );
+          }
+      );
+    }
+
+    final _formKey = GlobalKey<FormState>();
 
     return Scaffold(
         appBar: AppBar(
@@ -358,69 +523,70 @@ class _addRecordState extends State<AddRecord> {
                 ),
               ],
             ),
-            Container(
-              //margin: EdgeInsets.only(top: 10),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Column(children: [
-                      //Text('Category:'),
-                      TextButton(
-                        onPressed: () => setState(() {
-                          categoryButtonPressed();
-                        }),
-                        child: Text('$selectedCategory'),
-                        style: ButtonStyle(),
-                      ),
-                    ]),
-                    Column(children: [
-                      //Text('Account:'),
-                      TextButton(
-                        onPressed: () => setState(() {
-                          accountButtonPressed();
-                        }),
-                        child: Text('$selectedAccount'),
-                        style: ButtonStyle(),
-                      ),
-                    ]),
-                  ]),
+            transferOpt(secondaryIndex),
+            Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  Container(
+                      margin: EdgeInsets.all(10),
+                      child: TextFormField(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter record amount';
+                            }
+                            return null;
+                          },
+                          controller: amountController,
+                          decoration: InputDecoration(
+                            hintText: 'Amount',
+                            border: OutlineInputBorder(),
+                          ),
+                          textAlign: TextAlign.right,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.digitsOnly,
+                            CurrencyTextInputFormatter(symbol: '$currency', decimalDigits: 0,),
+                          ])),
+                  // https://stackoverflow.com/questions/50395032/flutter-textfield-with-currency-format
+                  // https://www.youtube.com/watch?v=eWa6iGncZ5Q
+                  // https://stackoverflow.com/questions/50736571/when-i-select-a-textfield-the-keyboard-moves-over-it
+                  Container(
+                      margin: EdgeInsets.all(10),
+                      child: TextFormField(
+                        controller: noteController,
+                        decoration: InputDecoration(
+                          hintText: 'Notes',
+                          border: OutlineInputBorder(),
+                        ),
+                        keyboardType: TextInputType.text,
+                        //maxLines: null,
+                      )),
+                ]
+              )
             ),
-            Container(
-                margin: EdgeInsets.all(10),
-                child: TextField(
-                    controller: amountController,
-                    decoration: InputDecoration(
-                      hintText: 'Amount',
-                      border: OutlineInputBorder(),
-                    ),
-                    textAlign: TextAlign.right,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly,
-                      CurrencyTextInputFormatter(symbol: '$currency'),
-                    ])),
-            // https://stackoverflow.com/questions/50395032/flutter-textfield-with-currency-format
-            // https://www.youtube.com/watch?v=eWa6iGncZ5Q
-            // https://stackoverflow.com/questions/50736571/when-i-select-a-textfield-the-keyboard-moves-over-it
-            Container(
-                margin: EdgeInsets.all(10),
-                child: TextField(
-                  controller: noteController,
-                  decoration: InputDecoration(
-                    hintText: 'Notes',
-                    border: OutlineInputBorder(),
-                  ),
-                  keyboardType: TextInputType.text,
-                  //maxLines: null,
-                )),
             ElevatedButton.icon(
               onPressed: () {
-                addTrx(
+                if (_formKey.currentState!.validate()) {
+                  // If the form is valid, display a snackbar. In the real world,
+                  // you'd often call a server or save the information in a database.
+                  if(selectedCategory == 'Select Category' || selectedCategory == 'Select Account'){
+                    alertDialogCategory(context);
+                  } else {
+                    /*addTrx(
                     int.parse(amountController.text
                         .replaceAll('Rp', '')
                         .replaceAll(',', '')
                         .replaceAll('.00', '')),
-                    noteController.text);
+                    noteController.text);*/
+                    Navigator.pushReplacementNamed(context, '/');
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Processing Data')),
+                    );
+                  }
+                }
+
+
               },
               icon: Icon(Icons.add_circle_outline),
               label: Text('Add',

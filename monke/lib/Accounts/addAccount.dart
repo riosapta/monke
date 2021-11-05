@@ -108,7 +108,7 @@ class _addAccountState extends State<AddAccount>{
                       child: ListAccount(),
                     ),
                     ElevatedButton.icon(
-                      onPressed: () {},
+                      onPressed: () {Navigator.pop(context);},
                       icon: Icon(Icons.add_circle_outline),
                       label: Text('Add',
                           style: TextStyle(

@@ -55,7 +55,7 @@ class _mainAccountsState extends State<mainAccounts> {
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      Text("${doc["jumlah_akun"]}",
+                      Text('Rp${doc["jumlah_akun"]}',
                           style: TextStyle(
                             fontSize: 20,
                           )),
@@ -330,6 +330,7 @@ class _mainAccountsState extends State<mainAccounts> {
               // ),
             ]),
             floatingActionButton: FloatingActionButton.extended(
+              heroTag: "btn2",
               onPressed: () => Navigator.pushNamed(context, '/addaccount'),
               icon: Icon(Icons.add_circle_outline, color: Colors.black),
               label: Text('Add New Account',

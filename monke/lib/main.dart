@@ -82,8 +82,12 @@ class _MyHomePageState extends State<MyHomePage> {
           ]),
 
 /////////////////////////////////////////////////////////////////////////  Body
-      body: tabs[_selectedIndex],
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: tabs,
+      ),
 
+          //  tabs[_selectedIndex],
       /////////////////////////////////////////////////////////////////////////  BOTTOM NAVIGATION BAR
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -340,15 +344,23 @@ class _mainPageState extends State<mainPage> {
                   leading: CircleAvatar(
                     radius: 20,
                     child: Icon(
-                        doc["akun_trx"] == "BRI"
+                        doc["jenis_trx"] == "Expense"
                             ? Icons.money_off_csred_outlined
-                            : Icons.attach_money_outlined,
+                            : doc["jenis_trx"] == "Income"
+                            ? Icons.attach_money_outlined
+                            : doc["jenis_trx"] == "Transfer"
+                            ? Icons.compare_arrows
+                            : Icons.close,
                         color: Colors.white),
-                    backgroundColor: doc["akun_trx"] == "BRI"
+                    backgroundColor: doc["jenis_trx"] == "Expense"
                         ? Colors.redAccent
-                        : Colors.greenAccent,
+                        : doc["jenis_trx"] == "Income"
+                        ? Colors.greenAccent[400]
+                        : doc["jenis_trx"] == "Transfer"
+                        ?Colors.blueAccent
+                        :Colors.black,
                   ),
-                  title: Text(doc["jenis_trx"],
+                  title: Text(doc["kategori_trx"],
                       style: TextStyle(
                         fontSize: 13,
                       )),
@@ -372,9 +384,13 @@ class _mainPageState extends State<mainPage> {
                   trailing: Text('Rp${doc["jumlah_trx"]}',
                       style: TextStyle(
                         fontSize: 20,
-                        color: doc["akun_trx"] == "BRI"
+                        color: doc["jenis_trx"] == "Expense"
                             ? Colors.redAccent
-                            : Colors.greenAccent[400],
+                            : doc["jenis_trx"] == "Income"
+                            ? Colors.greenAccent[400]
+                            : doc["jenis_trx"] == "Transfer"
+                            ?Colors.blueAccent
+                            :Colors.black,
                       )),
                 ),
                 Padding(
@@ -525,7 +541,7 @@ class _mainPageState extends State<mainPage> {
                     child: IconButton(
                       icon: const Icon(Icons.filter_list_alt),
                       onPressed: () {
-                        Navigator.pushNamed(context, '/filterby');
+                        Navigator.pushReplacementNamed(context, '/filterby');
                       },
                     ),
                   ),
@@ -543,14 +559,17 @@ class _mainPageState extends State<mainPage> {
                 .collection('transactions')
                 .snapshots(),
             builder: (context, snapshot) {
-              // if (!snapshot.hasData) return const Text('Loading...');
-              return ListView.builder(
-                itemCount: itemsData.length,
-                physics: BouncingScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return itemsData[index];
-                },
-              );
+              if (!snapshot.hasData) {
+                return const Text('Loading...');
+              } else if (snapshot.hasData){
+                return ListView.builder(
+                  itemCount: itemsData.length,
+                  physics: BouncingScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return itemsData[index];
+                  },
+                );
+              } else return const Text ('Error');
             },
           )),
         ],
@@ -558,6 +577,7 @@ class _mainPageState extends State<mainPage> {
 
       ///////////////////////////////////////////////////////////////////////// FLOATING ACTION BUTTON
       floatingActionButton: FloatingActionButton.extended(
+          heroTag: "btn1",
         onPressed: () => Navigator.pushNamed(context, '/addrecord'),
         icon: Icon(Icons.add_circle_outline, color: Colors.black),
         label: Text('Add New Records',
