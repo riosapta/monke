@@ -93,7 +93,7 @@ class addCategoryState extends State<AddCategory>{
                           child: ListCategory(),
                     ),
                     ElevatedButton.icon(
-                      onPressed: () {Navigator.of(context).maybePop();},
+                      onPressed: () {Navigator.pushReplacementNamed(context, '/');},
                       icon: Icon(Icons.add_circle_outline),
                       label: Text('Add',
                           style: TextStyle(
