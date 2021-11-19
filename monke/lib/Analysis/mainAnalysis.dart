@@ -16,7 +16,14 @@ class _mainAnalysisState extends State<mainAnalysis> {
   int secondaryIndex = 0;
   List<String> lst = ['Expense Overview','Income Overview', 'Expense Flow','Income Flow'];
   List<Widget> itemsData = [];
+  List<Widget> flowsData = [];
+  var date = new List<int>.generate(31, (i) => i + 1);
   int touchedIndex = -1;
+  final List<Color> gradient = [
+    const Color(0xffFFE284),
+    const Color(0xff00D9B1),
+    const Color(0xff006A66),
+  ];
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -144,10 +151,261 @@ class _mainAnalysisState extends State<mainAnalysis> {
     });
   }
 
+  void getPostsData2() {
+    //List<dynamic> responseList = RECORDS_DATA;
+    List<Widget> listItems = [];
+    int idx = 0;
+    // FirebaseFirestore.instance
+    //     .collection('transactions')
+    //     .get()
+    //     .then((QuerySnapshot querySnapshot) {
+      date.forEach((post) {
+        listItems.add(Padding(
+          padding: const EdgeInsets.symmetric(vertical: 0.0),
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                ListTile(
+                  leading: Text('Month x ${date[idx++]}th'),
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        children: [
+                          Text('EXPENSE',
+                              style: TextStyle(
+                                fontSize: 14,
+                              )),
+                          Text('-RpXXX,XXX.00',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.redAccent,
+                              )),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text('INCOME',
+                              style: TextStyle(
+                                fontSize: 14,
+                              )),
+                          Text('-RpXXX,XXX.00',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.greenAccent[400],
+                              )),
+                        ],
+                      ),
+                    ],
+                  ),
+                  dense: true,
+                  onTap: (){},
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 0.0),
+                  child: Divider(
+                    // color: doc["akun_trx"] == "BRI" ? Colors.redAccent : Colors.greenAccent,
+                    height: 0,
+                    thickness: 0.7,
+                  ),
+                ),
+              ]),
+        ));
+      });
+    // });
+    setState(() {
+      flowsData = listItems;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     getPostsData();
+    getPostsData2();
+  }
+
+  Widget getChart(int idx) {
+    Widget child;
+    if (idx == 0 || idx == 1) {
+      return AspectRatio(
+        aspectRatio: 2.4,
+        child: PieChart(
+          PieChartData(
+            pieTouchData: PieTouchData(touchCallback:
+                (FlTouchEvent event, pieTouchResponse) {
+              setState(() {
+                if (!event.isInterestedForInteractions ||
+                    pieTouchResponse == null ||
+                    pieTouchResponse.touchedSection == null) {
+                  touchedIndex = -1;
+                  return;
+                }
+                touchedIndex = pieTouchResponse
+                    .touchedSection!.touchedSectionIndex;
+              });
+            }),
+            borderData: FlBorderData(show: false),
+            sectionsSpace: 0,
+            centerSpaceRadius: 35,
+
+            sections: getSections(touchedIndex),
+          ),
+        ),
+      );
+    } else if (idx == 2 || idx == 3) {
+      return Padding(
+        padding: const EdgeInsets.only(top: 20),
+        child:
+          AspectRatio(
+            aspectRatio: 2.4,
+            child: LineChart(
+                LineChartData(
+                  minX: 0,
+                  maxX: 30,
+                  minY: 0,
+                  maxY: 999999,
+                  titlesData: FlTitlesData(
+                    show: true,
+                    bottomTitles: SideTitles(
+                      showTitles: true,
+                      // getTitles: (value){
+                      //   switch (value.toInt()){
+                      //     case 1:
+                      //       return '01';
+                      //     case 9:
+                      //       return '09';
+                      //     case 16:
+                      //       return '16';
+                      //     case 24:
+                      //       return '24';
+                      //     case 31:
+                      //       return '31';
+                      //   }
+                      //   return '';
+                      // }
+                    ),
+                  ),
+                  lineBarsData: [
+                    LineChartBarData(
+                      spots: [
+                        FlSpot(0, 3000),
+                        FlSpot(3, 16000),
+                        FlSpot(8, 786000),
+                        FlSpot(10, 500000),
+                        FlSpot(12, 420000),
+                        FlSpot(17, 322000),
+                        FlSpot(25, 700000),
+                        FlSpot(30, 120000),
+                      ],
+                      colors: gradient,
+                      belowBarData: BarAreaData(
+                        show: true,
+                        colors: gradient
+                            .map((color) => color.withOpacity(0.2)).toList(),
+                      ),
+                    )
+                  ]
+                ),
+            )
+          ),
+      );
+    }
+    return SizedBox.shrink();
+  }
+
+  Widget getDetails(int idx) {
+    Widget child;
+    if (idx == 0 || idx == 1) {
+      return Expanded(
+        child:
+          Column(
+            children: <Widget>[
+              Container(
+                  height: MediaQuery.of(context).size.height / 7,
+                  width: MediaQuery.of(context).size.width,
+                  margin: EdgeInsets.symmetric(horizontal: 5),
+                  // decoration: BoxDecoration(
+                  //   border: Border.all(color: Colors.grey, width: 1),
+                  //   borderRadius: BorderRadius.all(
+                  //       Radius.circular(10.0)
+                  //   ),
+                  // ),
+                  child: ListView.builder(
+                    itemCount: 1,
+                    physics: BouncingScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(5),
+                            child: IndicatorsWidget(),
+                          ),
+                        ],
+                      );
+                    },
+                  )
+              ),
+              Text('scroll for more', style: TextStyle(color: Colors.grey[400]),),
+              Divider(
+                // color: doc["akun_trx"] == "BRI" ? Colors.redAccent : Colors.greenAccent,
+                height: 10,
+                thickness: 1,
+              ),
+              Expanded(
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('transactions')
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const Text('Loading...');
+                      } else if (snapshot.hasData){
+                        return ListView.builder(
+                          itemCount: itemsData.length,
+                          physics: BouncingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return itemsData[index];
+                          },
+                        );
+                      } else return const Text ('Error');
+                    },
+                  )),
+              Text('scroll for more', style: TextStyle(color: Colors.grey[400]),),
+            ],
+          ),
+      );
+    } else if (idx == 2 || idx == 3) {
+      return Expanded(
+        child:
+        Column(
+          children: <Widget>[
+            Expanded(
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('transactions')
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Text('Loading...');
+                    } else if (snapshot.hasData){
+                      return ListView.builder(
+                        itemCount: flowsData.length,
+                        physics: BouncingScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return flowsData[index];
+                        },
+                      );
+                    } else return const Text ('Error');
+                  },
+                )),
+            Text('scroll for more', style: TextStyle(color: Colors.grey[400]),),
+          ],
+        ),
+      );
+    }
+    return SizedBox.shrink();
   }
 
   @override
@@ -222,83 +480,85 @@ class _mainAnalysisState extends State<mainAnalysis> {
                   ],
                 ),
               ),
-              AspectRatio(
-                aspectRatio: 2.4,
-                child: PieChart(
-                  PieChartData(
-                    pieTouchData: PieTouchData(touchCallback:
-                        (FlTouchEvent event, pieTouchResponse) {
-                      setState(() {
-                        if (!event.isInterestedForInteractions ||
-                            pieTouchResponse == null ||
-                            pieTouchResponse.touchedSection == null) {
-                          touchedIndex = -1;
-                          return;
-                        }
-                        touchedIndex = pieTouchResponse
-                            .touchedSection!.touchedSectionIndex;
-                      });
-                    }),
-                    borderData: FlBorderData(show: false),
-                    sectionsSpace: 0,
-                    centerSpaceRadius: 35,
-
-                    sections: getSections(touchedIndex),
-                  ),
-                ),
-              ),
-              Container(
-                height: MediaQuery.of(context).size.height / 7,
-                width: MediaQuery.of(context).size.width,
-                margin: EdgeInsets.symmetric(horizontal: 5),
-                // decoration: BoxDecoration(
-                //   border: Border.all(color: Colors.grey, width: 1),
-                //   borderRadius: BorderRadius.all(
-                //       Radius.circular(10.0)
-                //   ),
-                // ),
-                child: ListView.builder(
-                  itemCount: 1,
-                  physics: BouncingScrollPhysics(),
-                  itemBuilder: (context, index) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(5),
-                            child: IndicatorsWidget(),
-                          ),
-                        ],
-                      );
-                    },
-                  )
-              ),
-                Text('scroll for more', style: TextStyle(color: Colors.grey[400]),),
-              Divider(
-                // color: doc["akun_trx"] == "BRI" ? Colors.redAccent : Colors.greenAccent,
-                height: 10,
-                thickness: 1,
-              ),
-              Expanded(
-                  child: StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection('transactions')
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return const Text('Loading...');
-                      } else if (snapshot.hasData){
-                        return ListView.builder(
-                          itemCount: itemsData.length,
-                          physics: BouncingScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            return itemsData[index];
-                          },
-                        );
-                      } else return const Text ('Error');
-                    },
-                  )),
-                Text('scroll for more', style: TextStyle(color: Colors.grey[400]),),
+              getChart(secondaryIndex),
+              getDetails(secondaryIndex),
+              // AspectRatio(
+              //   aspectRatio: 2.4,
+              //   child: PieChart(
+              //     PieChartData(
+              //       pieTouchData: PieTouchData(touchCallback:
+              //           (FlTouchEvent event, pieTouchResponse) {
+              //         setState(() {
+              //           if (!event.isInterestedForInteractions ||
+              //               pieTouchResponse == null ||
+              //               pieTouchResponse.touchedSection == null) {
+              //             touchedIndex = -1;
+              //             return;
+              //           }
+              //           touchedIndex = pieTouchResponse
+              //               .touchedSection!.touchedSectionIndex;
+              //         });
+              //       }),
+              //       borderData: FlBorderData(show: false),
+              //       sectionsSpace: 0,
+              //       centerSpaceRadius: 35,
+              //
+              //       sections: getSections(touchedIndex),
+              //     ),
+              //   ),
+              // ),
+              // Container(
+              //   height: MediaQuery.of(context).size.height / 7,
+              //   width: MediaQuery.of(context).size.width,
+              //   margin: EdgeInsets.symmetric(horizontal: 5),
+              //   // decoration: BoxDecoration(
+              //   //   border: Border.all(color: Colors.grey, width: 1),
+              //   //   borderRadius: BorderRadius.all(
+              //   //       Radius.circular(10.0)
+              //   //   ),
+              //   // ),
+              //   child: ListView.builder(
+              //     itemCount: 1,
+              //     physics: BouncingScrollPhysics(),
+              //     itemBuilder: (context, index) {
+              //         return Row(
+              //           mainAxisAlignment: MainAxisAlignment.center,
+              //           children: [
+              //             Padding(
+              //               padding: const EdgeInsets.all(5),
+              //               child: IndicatorsWidget(),
+              //             ),
+              //           ],
+              //         );
+              //       },
+              //     )
+              // ),
+              //   Text('scroll for more', style: TextStyle(color: Colors.grey[400]),),
+              // Divider(
+              //   // color: doc["akun_trx"] == "BRI" ? Colors.redAccent : Colors.greenAccent,
+              //   height: 10,
+              //   thickness: 1,
+              // ),
+              // Expanded(
+              //     child: StreamBuilder<QuerySnapshot>(
+              //       stream: FirebaseFirestore.instance
+              //           .collection('transactions')
+              //           .snapshots(),
+              //       builder: (context, snapshot) {
+              //         if (!snapshot.hasData) {
+              //           return const Text('Loading...');
+              //         } else if (snapshot.hasData){
+              //           return ListView.builder(
+              //             itemCount: itemsData.length,
+              //             physics: BouncingScrollPhysics(),
+              //             itemBuilder: (context, index) {
+              //               return itemsData[index];
+              //             },
+              //           );
+              //         } else return const Text ('Error');
+              //       },
+              //     )),
+              //   Text('scroll for more', style: TextStyle(color: Colors.grey[400]),),
               // ),
             ]),
           ),
