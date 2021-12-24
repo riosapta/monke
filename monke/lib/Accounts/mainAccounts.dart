@@ -4,6 +4,8 @@ import '/recordsData.dart';
 import 'detailsAccount.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../globals.dart' as globals;
+
 class mainAccounts extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _mainAccountsState();
@@ -15,7 +17,18 @@ class _mainAccountsState extends State<mainAccounts> {
   final Stream _inexStream =
       FirebaseFirestore.instance.collection('inexData').doc('inex').snapshots();
 
-  void onSelected(BuildContext context, int item) {
+  CollectionReference deleteAcc =
+      FirebaseFirestore.instance.collection('accounts');
+
+  Future<void> deleteField(docID) {
+    return deleteAcc
+        .doc(docID)
+        .delete()
+        .then((value) => print("Acc Deleted"))
+        .catchError((error) => print("Failed to delete Acc: $error"));
+  }
+
+  void onSelected(BuildContext context, item) {
     switch (item) {
       case 0:
         Navigator.pushNamed(context, '/detailsaccount');
@@ -25,6 +38,11 @@ class _mainAccountsState extends State<mainAccounts> {
         break;
       case 2:
         print('Delete function insert here');
+        deleteField(globals.globDocIDDel);
+        getPostsData();
+        setState(() {
+          build(context);
+        });
         break;
     }
   }
@@ -60,7 +78,14 @@ class _mainAccountsState extends State<mainAccounts> {
                             fontSize: 20,
                           )),
                       PopupMenuButton<int>(
-                        onSelected: (item) => onSelected(context, item),
+                        onSelected: (item) => {
+                          onSelected(context, item),
+                          globals.globDocIDDel = doc.id,
+                          globals.globDocID = doc.id,
+                          globals.initName = doc["nama_akun"],
+                          globals.initJumlah = doc["jumlah_akun"],
+                          print(globals.globDocIDDel),
+                        },
                         itemBuilder: (context) => [
                           PopupMenuItem<int>(value: 0, child: Text('Details')),
                           PopupMenuItem<int>(value: 1, child: Text('Edit')),
@@ -121,6 +146,7 @@ class _mainAccountsState extends State<mainAccounts> {
   void initState() {
     super.initState();
     getPostsData();
+    updateAllData();
   }
 
   @override

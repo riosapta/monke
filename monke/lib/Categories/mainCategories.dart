@@ -4,6 +4,8 @@ import '/recordsData.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+import '../globals.dart' as globals;
+
 class mainCategories extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _mainCategoriesState();
@@ -15,6 +17,23 @@ class _mainCategoriesState extends State<mainCategories> {
 
   List<Widget> itemsData = [];
   List<Widget> itemsData2 = [];
+
+  CollectionReference deleteCat =
+      FirebaseFirestore.instance.collection('category');
+
+  Future<void> deleteField(docID) {
+    return deleteCat
+        .doc(docID)
+        .delete()
+        .then((value) => print("Cat Deleted"))
+        .catchError((error) => print("Failed to delete Cat: $error"));
+  }
+
+  void selectedDocEdit(docID, initName, initType) {
+    globals.globDocID = docID;
+    globals.initName = initName;
+    globals.initType = initType;
+  }
 
   void getPostsData() {
     List<dynamic> responseList = CATEGORY_DATA;
@@ -37,7 +56,7 @@ class _mainCategoriesState extends State<mainCategories> {
                         color: Colors.white),
                     backgroundColor: Colors.redAccent,
                   ),
-                  title: Text(doc.id),
+                  title: Text(doc["nama_cat"]),
                   onTap: () => (''),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -45,13 +64,21 @@ class _mainCategoriesState extends State<mainCategories> {
                       IconButton(
                         onPressed: () {
                           {
+                            selectedDocEdit(
+                                doc.id, doc["nama_cat"], doc["tipe_cat"]);
                             Navigator.pushNamed(context, '/editcategory');
                           }
                         },
                         icon: Icon(Icons.edit),
                       ),
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          deleteField(doc.id);
+                          getPostsData();
+                          setState(() {
+                            getCategories(secondaryIndex);
+                          });
+                        },
                         icon: Icon(Icons.delete),
                       ),
                     ],
@@ -94,7 +121,7 @@ class _mainCategoriesState extends State<mainCategories> {
                         Icon(Icons.attach_money_outlined, color: Colors.white),
                     backgroundColor: Colors.greenAccent,
                   ),
-                  title: Text(doc.id),
+                  title: Text(doc["nama_cat"]),
                   onTap: () => (''),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -102,13 +129,21 @@ class _mainCategoriesState extends State<mainCategories> {
                       IconButton(
                         onPressed: () {
                           {
-                            Navigator.pushNamed(context, '/editaccount');
+                            selectedDocEdit(
+                                doc.id, doc["nama_cat"], doc["tipe_cat"]);
+                            Navigator.pushNamed(context, '/editcategory');
                           }
                         },
                         icon: Icon(Icons.edit),
                       ),
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          deleteField(doc.id);
+                          getPostsData2();
+                          setState(() {
+                            getCategories(secondaryIndex);
+                          });
+                        },
                         icon: Icon(Icons.delete),
                       ),
                     ],
@@ -135,6 +170,7 @@ class _mainCategoriesState extends State<mainCategories> {
     super.initState();
     getPostsData();
     getPostsData2();
+    getCategories(secondaryIndex);
   }
 
   void changeSecondaryIndex(int index) {
@@ -145,7 +181,8 @@ class _mainCategoriesState extends State<mainCategories> {
 
   Widget customRadio(String txt, int index) {
     return ElevatedButton(
-      onPressed: () => changeSecondaryIndex(index),
+      onPressed: () =>
+          {changeSecondaryIndex(index), getCategories(secondaryIndex)},
       style: ElevatedButton.styleFrom(
         minimumSize: Size(170, 40.0),
         primary: Colors.white,
@@ -164,7 +201,6 @@ class _mainCategoriesState extends State<mainCategories> {
   }
 
   Widget getCategories(int idx) {
-    Widget child;
     if (idx == 0) {
       return Expanded(
           child: StreamBuilder<QuerySnapshot>(
@@ -226,7 +262,7 @@ class _mainCategoriesState extends State<mainCategories> {
               color: Colors.grey[400],
               thickness: 1,
             ),
-            getCategories(secondaryIndex)
+            getCategories(secondaryIndex),
           ],
         ),
       ),

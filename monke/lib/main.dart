@@ -521,6 +521,7 @@ class _mainPageState extends State<mainPage> {
   void initState() {
     super.initState();
     getPostsData();
+    updateAllData();
     startTheCounter();
   }
 
