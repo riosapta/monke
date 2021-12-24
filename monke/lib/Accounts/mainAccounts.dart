@@ -120,7 +120,6 @@ class _mainAccountsState extends State<mainAccounts> {
   @override
   void initState() {
     super.initState();
-    updateAllData();
     getPostsData();
   }
 

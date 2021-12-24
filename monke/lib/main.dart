@@ -17,6 +17,8 @@ void main() async {
   runApp(const MyApp());
 }
 
+int testaja = 0;
+
 /////////////////////////////////////////////////////////////////////////  Wrapper Classes
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -87,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
         children: tabs,
       ),
 
-          //  tabs[_selectedIndex],
+      //  tabs[_selectedIndex],
       /////////////////////////////////////////////////////////////////////////  BOTTOM NAVIGATION BAR
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -135,9 +137,12 @@ class mainPage extends StatefulWidget {
 
 class _mainPageState extends State<mainPage> {
   List<Widget> itemsData = [];
+  List<Widget> tempItemsData = [];
   DateTime selectedDate = DateTime.now();
   CollectionReference deleteTrx =
       FirebaseFirestore.instance.collection('transactions');
+  var _counter = ValueNotifier<int>(0);
+  final Widget goodJob = const Text('Good job!');
 /////////////////////////////////////////////////////////////////////////////////////////////////////////// DETAILS
   void showDetails(BuildContext context, DocumentSnapshot doc) {
     showDialog(
@@ -188,7 +193,14 @@ class _mainPageState extends State<mainPage> {
                               Row(children: [
                                 IconButton(
                                     onPressed: () {
-                                      selectedDocID(doc.id);
+                                      selectedDocEdit(
+                                          doc.id,
+                                          doc["akun_trx"],
+                                          doc["catatan_trx"],
+                                          doc["jenis_trx"],
+                                          doc["jumlah_trx"],
+                                          doc["kategori_trx"],
+                                          doc["tanggal_trx"]);
                                       Navigator.pushNamed(
                                           context, '/editrecord',
                                           arguments: {'docID': doc.id});
@@ -300,8 +312,15 @@ class _mainPageState extends State<mainPage> {
         });
   }
 
-  void selectedDocID(docID) {
+  void selectedDocEdit(docID, initAccount, initNote, initJenis, initJumlah,
+      initCategory, initDate) {
     globals.globDocID = docID;
+    globals.initAccount = initAccount;
+    globals.initNote = initNote;
+    globals.initJenis = initJenis;
+    globals.initJumlah = initJumlah;
+    globals.initCategory = initCategory;
+    globals.initDate = initDate.toDate();
     print(globals.globDocID);
   }
 
@@ -316,6 +335,8 @@ class _mainPageState extends State<mainPage> {
       setState(() {
         selectedDate = picked;
       });
+    getPostsData();
+    startTheCounter();
   }
 
   Future<void> deleteField(docID) {
@@ -330,8 +351,14 @@ class _mainPageState extends State<mainPage> {
   void getPostsData() {
     //List<dynamic> responseList = RECORDS_DATA;
     List<Widget> listItems = [];
+    DateTime _start =
+        DateTime(selectedDate.year, selectedDate.month, selectedDate.day, 0, 0);
+    DateTime _end = DateTime(
+        selectedDate.year, selectedDate.month, selectedDate.day, 23, 59, 59);
     FirebaseFirestore.instance
         .collection('transactions')
+        .where('tanggal_trx', isGreaterThanOrEqualTo: _start)
+        .where('tanggal_trx', isLessThanOrEqualTo: _end)
         .get()
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
@@ -347,18 +374,18 @@ class _mainPageState extends State<mainPage> {
                         doc["jenis_trx"] == "Expense"
                             ? Icons.money_off_csred_outlined
                             : doc["jenis_trx"] == "Income"
-                            ? Icons.attach_money_outlined
-                            : doc["jenis_trx"] == "Transfer"
-                            ? Icons.compare_arrows
-                            : Icons.close,
+                                ? Icons.attach_money_outlined
+                                : doc["jenis_trx"] == "Transfer"
+                                    ? Icons.compare_arrows
+                                    : Icons.close,
                         color: Colors.white),
                     backgroundColor: doc["jenis_trx"] == "Expense"
                         ? Colors.redAccent
                         : doc["jenis_trx"] == "Income"
-                        ? Colors.greenAccent[400]
-                        : doc["jenis_trx"] == "Transfer"
-                        ?Colors.blueAccent
-                        :Colors.black,
+                            ? Colors.greenAccent[400]
+                            : doc["jenis_trx"] == "Transfer"
+                                ? Colors.blueAccent
+                                : Colors.black,
                   ),
                   title: Text(doc["kategori_trx"],
                       style: TextStyle(
@@ -387,10 +414,10 @@ class _mainPageState extends State<mainPage> {
                         color: doc["jenis_trx"] == "Expense"
                             ? Colors.redAccent
                             : doc["jenis_trx"] == "Income"
-                            ? Colors.greenAccent[400]
-                            : doc["jenis_trx"] == "Transfer"
-                            ?Colors.blueAccent
-                            :Colors.black,
+                                ? Colors.greenAccent[400]
+                                : doc["jenis_trx"] == "Transfer"
+                                    ? Colors.blueAccent
+                                    : Colors.black,
                       )),
                 ),
                 Padding(
@@ -405,9 +432,8 @@ class _mainPageState extends State<mainPage> {
         ));
       });
     });
-    setState(() {
-      itemsData = listItems;
-    });
+    itemsData = listItems;
+    tempItemsData = itemsData;
   }
 
   void updateAllData() {
@@ -483,11 +509,19 @@ class _mainPageState extends State<mainPage> {
     });
   }
 
+  void startTheCounter() async {
+    for (int i = 0; i < 5; i++) {
+      await Future.delayed(Duration(seconds: 1));
+      _counter.value += 1;
+      print(_counter);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    updateAllData();
     getPostsData();
+    startTheCounter();
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////  MAINPAGE BUILD
@@ -518,6 +552,8 @@ class _mainPageState extends State<mainPage> {
                                 selectedDate = selectedDate
                                     .subtract(const Duration(days: 1));
                               });
+                              getPostsData();
+                              startTheCounter();
                             }),
                         TextButton(
                           onPressed: () => _selectDate(context),
@@ -532,6 +568,8 @@ class _mainPageState extends State<mainPage> {
                                 selectedDate =
                                     selectedDate.add(const Duration(days: 1));
                               });
+                              getPostsData();
+                              startTheCounter();
                             }),
                       ],
                     ),
@@ -553,31 +591,63 @@ class _mainPageState extends State<mainPage> {
           ),
 
           /////////////////////////////////////////////////////////////////////////  CONTENT
-          Expanded(
-              child: StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection('transactions')
-                .snapshots(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return const Text('Loading...');
-              } else if (snapshot.hasData){
-                return ListView.builder(
-                  itemCount: itemsData.length,
-                  physics: BouncingScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    return itemsData[index];
-                  },
-                );
-              } else return const Text ('Error');
+          ValueListenableBuilder<int>(
+            builder: (BuildContext context, int value, Widget? child) {
+              // This builder will only get called when the _counter
+              // is updated.
+              return Expanded(
+                  child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('transactions')
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Text('Loading...');
+                  } else if (snapshot.hasData) {
+                    return ListView.builder(
+                      itemCount: itemsData.length,
+                      physics: BouncingScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        return itemsData[index];
+                      },
+                    );
+                  } else
+                    return const Text('Error');
+                },
+              ));
             },
-          )),
+            valueListenable: _counter,
+            // The child parameter is most helpful if the child is
+            // expensive to build and does not depend on the value from
+            // the notifier.
+            child: goodJob,
+          ),
+          // Expanded(
+          //     child: StreamBuilder<QuerySnapshot>(
+          //   stream: FirebaseFirestore.instance
+          //       .collection('transactions')
+          //       .snapshots(),
+          //   builder: (context, snapshot) {
+          //     if (!snapshot.hasData) {
+          //       return const Text('Loading...');
+          //     } else if (snapshot.hasData) {
+          //       return ListView.builder(
+          //         itemCount: itemsData.length,
+          //         physics: BouncingScrollPhysics(),
+          //         itemBuilder: (context, index) {
+          //           return itemsData[index];
+          //         },
+          //       );
+          //     } else
+          //       return const Text('Error');
+          //   },
+          // )),
         ],
       ),
 
       ///////////////////////////////////////////////////////////////////////// FLOATING ACTION BUTTON
       floatingActionButton: FloatingActionButton.extended(
-          heroTag: "btn1",
+        heroTag: "btn1",
         onPressed: () => Navigator.pushNamed(context, '/addrecord'),
         icon: Icon(Icons.add_circle_outline, color: Colors.black),
         label: Text('Add New Records',

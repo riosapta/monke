@@ -75,7 +75,11 @@ class _addRecordState extends State<AddRecord> {
 
   Widget customRadio2(String txt, int index) {
     return OutlinedButton(
-      onPressed: () {changeSecondaryIndex(index); categoryList(); selectedCategory = 'Select Category'; },
+      onPressed: () {
+        changeSecondaryIndex(index);
+        categoryList();
+        selectedCategory = 'Select Category';
+      },
       style: ElevatedButton.styleFrom(
         primary: Colors.white,
         shape:
@@ -97,39 +101,39 @@ class _addRecordState extends State<AddRecord> {
     if (idx == 0) {
       return Expanded(
           child: StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection('category')
-                .where('tipe_cat', isEqualTo: 'income')
-                .snapshots(),
-            builder: (context, snapshot) {
-              // if (!snapshot.hasData) return const Text('Loading...');
-              return ListView.builder(
-                itemCount: catData.length,
-                physics: BouncingScrollPhysics(),
-                itemBuilder: (context, idx3) {
-                  return catData[idx3];
-                },
-              );
+        stream: FirebaseFirestore.instance
+            .collection('category')
+            .where('tipe_cat', isEqualTo: 'income')
+            .snapshots(),
+        builder: (context, snapshot) {
+          // if (!snapshot.hasData) return const Text('Loading...');
+          return ListView.builder(
+            itemCount: catData.length,
+            physics: BouncingScrollPhysics(),
+            itemBuilder: (context, idx3) {
+              return catData[idx3];
             },
-          ));
+          );
+        },
+      ));
     } else if (idx == 1) {
       return Expanded(
           child: StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection('category')
-                .where('tipe_cat', isEqualTo: 'expense')
-                .snapshots(),
-            builder: (context, snapshot) {
-              // if (!snapshot.hasData) return const Text('Loading...');
-              return ListView.builder(
-                itemCount: catData.length,
-                physics: BouncingScrollPhysics(),
-                itemBuilder: (context, idx3) {
-                  return catData[idx3];
-                },
-              );
+        stream: FirebaseFirestore.instance
+            .collection('category')
+            .where('tipe_cat', isEqualTo: 'expense')
+            .snapshots(),
+        builder: (context, snapshot) {
+          // if (!snapshot.hasData) return const Text('Loading...');
+          return ListView.builder(
+            itemCount: catData.length,
+            physics: BouncingScrollPhysics(),
+            itemBuilder: (context, idx3) {
+              return catData[idx3];
             },
-          ));
+          );
+        },
+      ));
     }
     return SizedBox.shrink();
   }
@@ -199,39 +203,34 @@ class _addRecordState extends State<AddRecord> {
     });
   }
 
-  void categoryList(){
+  void categoryList() {
     List<Widget> listCat = [];
-    if(secondaryIndex == 0){
+    if (secondaryIndex == 0) {
       FirebaseFirestore.instance
           .collection('category')
           .where('tipe_cat', isEqualTo: 'income')
           .get()
           .then((QuerySnapshot querySnapshot) {
         querySnapshot.docs.forEach((doc) {
-          listCat.add(
-              ListTile(
-                leading: Icon(Icons.circle),
-                title: Text(doc.id),
-                onTap: () => selectCategory(doc.id),
-              )
-          );
+          listCat.add(ListTile(
+            leading: Icon(Icons.circle),
+            title: Text(doc.id),
+            onTap: () => selectCategory(doc.id),
+          ));
         });
       });
-    }
-    else if(secondaryIndex == 1){
+    } else if (secondaryIndex == 1) {
       FirebaseFirestore.instance
           .collection('category')
           .where('tipe_cat', isEqualTo: 'expense')
           .get()
           .then((QuerySnapshot querySnapshot) {
         querySnapshot.docs.forEach((doc) {
-          listCat.add(
-              ListTile(
-                leading: Icon(Icons.circle),
-                title: Text(doc.id),
-                onTap: () => selectCategory(doc.id),
-              )
-          );
+          listCat.add(ListTile(
+            leading: Icon(Icons.circle),
+            title: Text(doc.id),
+            onTap: () => selectCategory(doc.id),
+          ));
         });
       });
     }
@@ -241,20 +240,18 @@ class _addRecordState extends State<AddRecord> {
     });
   }
 
-  void accountList(){
+  void accountList() {
     List<Widget> listItems = [];
     FirebaseFirestore.instance
         .collection('accounts')
         .get()
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
-        listItems.add(
-            ListTile(
-              leading: Icon(Icons.circle),
-              title: Text(doc['nama_akun']),
-              onTap: () => selectAccount(doc['nama_akun']),
-            )
-        );
+        listItems.add(ListTile(
+          leading: Icon(Icons.circle),
+          title: Text(doc['nama_akun']),
+          onTap: () => selectAccount(doc['nama_akun']),
+        ));
       });
     });
     setState(() {
@@ -268,6 +265,7 @@ class _addRecordState extends State<AddRecord> {
     accountList();
     categoryList();
   }
+
   void accountButtonPressed() {
     showModalBottomSheet<dynamic>(
         shape: RoundedRectangleBorder(
@@ -307,29 +305,30 @@ class _addRecordState extends State<AddRecord> {
                 height: 0,
               ),
               Expanded(
-                child:StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('accounts')
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return const Text('Loading...');
-                    } else if (snapshot.hasData){
-                      return ListView.builder(
-                        itemCount: accData.length,
-                        physics: BouncingScrollPhysics(),
-                        itemBuilder: (context, idx2) {
-                          return accData[idx2];
-                        },
-                      );
-                    } else return const Text ('Error');
-                  },
-                )
-                // SizedBox(
-                //   height: MediaQuery.of(context).size.height * 0.75,
-                //   child:
-                // ),
-              ),
+                  child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('accounts')
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Text('Loading...');
+                  } else if (snapshot.hasData) {
+                    return ListView.builder(
+                      itemCount: accData.length,
+                      physics: BouncingScrollPhysics(),
+                      itemBuilder: (context, idx2) {
+                        return accData[idx2];
+                      },
+                    );
+                  } else
+                    return const Text('Error');
+                },
+              )
+                  // SizedBox(
+                  //   height: MediaQuery.of(context).size.height * 0.75,
+                  //   child:
+                  // ),
+                  ),
               Divider(
                 color: Colors.black,
                 height: 0,
@@ -352,17 +351,16 @@ class _addRecordState extends State<AddRecord> {
   void selectAccount(String name) {
     Navigator.pop(context);
     setState(() {
-      if(accIndex == 1){
+      if (accIndex == 1) {
         selectedAccount = name;
-      }
-      else if(accIndex == 2){
+      } else if (accIndex == 2) {
         selectedAccount2 = name;
       }
     });
   }
 
-  Widget transferOpt(int idx){
-    if(idx == 2){
+  Widget transferOpt(int idx) {
+    if (idx == 2) {
       return Container(
         //margin: EdgeInsets.only(top: 10),
         child: Row(
@@ -394,7 +392,7 @@ class _addRecordState extends State<AddRecord> {
               ]),
             ]),
       );
-    }else{
+    } else {
       return Container(
         //margin: EdgeInsets.only(top: 10),
         child: Row(
@@ -474,10 +472,8 @@ class _addRecordState extends State<AddRecord> {
                   ),
                 ],
               );
-            }
-            );
-          }
-      );
+            });
+          });
     }
 
     final _formKey = GlobalKey<FormState>();
@@ -525,9 +521,8 @@ class _addRecordState extends State<AddRecord> {
             ),
             transferOpt(secondaryIndex),
             Form(
-              key: _formKey,
-              child: Column(
-                children: [
+                key: _formKey,
+                child: Column(children: [
                   Container(
                       margin: EdgeInsets.all(10),
                       child: TextFormField(
@@ -546,7 +541,10 @@ class _addRecordState extends State<AddRecord> {
                           keyboardType: TextInputType.number,
                           inputFormatters: <TextInputFormatter>[
                             FilteringTextInputFormatter.digitsOnly,
-                            CurrencyTextInputFormatter(symbol: '$currency', decimalDigits: 0,),
+                            CurrencyTextInputFormatter(
+                              symbol: '$currency',
+                              decimalDigits: 0,
+                            ),
                           ])),
                   // https://stackoverflow.com/questions/50395032/flutter-textfield-with-currency-format
                   // https://www.youtube.com/watch?v=eWa6iGncZ5Q
@@ -562,31 +560,28 @@ class _addRecordState extends State<AddRecord> {
                         keyboardType: TextInputType.text,
                         //maxLines: null,
                       )),
-                ]
-              )
-            ),
+                ])),
             ElevatedButton.icon(
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   // If the form is valid, display a snackbar. In the real world,
                   // you'd often call a server or save the information in a database.
-                  if(selectedCategory == 'Select Category' || selectedCategory == 'Select Account'){
+                  if (selectedCategory == 'Select Category' ||
+                      selectedCategory == 'Select Account') {
                     alertDialogCategory(context);
                   } else {
-                    /*addTrx(
-                    int.parse(amountController.text
-                        .replaceAll('Rp', '')
-                        .replaceAll(',', '')
-                        .replaceAll('.00', '')),
-                    noteController.text);*/
+                    addTrx(
+                        int.parse(amountController.text
+                            .replaceAll('Rp', '')
+                            .replaceAll(',', '')
+                            .replaceAll('.00', '')),
+                        noteController.text);
                     Navigator.pushReplacementNamed(context, '/');
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Processing Data')),
                     );
                   }
                 }
-
-
               },
               icon: Icon(Icons.add_circle_outline),
               label: Text('Add',
